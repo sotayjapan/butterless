@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cá Nhân | Butterless VIP System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --gold: #FFD700;
+            --gold-dark: #b8860b;
+            --bg-main: #050505;
+            --bg-card: #111111;
+            --bg-item: #1a1a1a;
+            --text-light: #f5f5f5;
+            --text-muted: #888888;
+            --green: #2ecc71;
+            --red: #ff4d4d;
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        /* RESET & BASE */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-light); line-height: 1.6; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shine { from { left: -100%; } to { left: 100%; } }
+
+        /* HEADER & AVATAR SECTION */
+        .profile-header {
+            background: linear-gradient(180deg, #1a1a1a 0%, #050505 100%);
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid #222;
+            position: relative;
+        }
+        .avatar-wrapper {
+            width: 100px; height: 100px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+            padding: 3px;
+            background: var(--bg-main);
+            position: relative;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+        .avatar-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .vip-badge {
+            position: absolute; bottom: -5px; right: -5px;
+            background: var(--gold); color: #000;
+            font-size: 10px; font-weight: 900;
+            padding: 4px 8px; border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        /* SESSION STORAGE UI (PHẦN NHẬP SDT) */
+        .user-identity { margin-top: 10px; }
+        #phoneInput {
+            background: var(--bg-item);
+            border: 1px solid #333;
+            color: var(--gold);
+            text-align: center;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 16px;
+            outline: none;
+            width: 80%; max-width: 250px;
+            transition: 0.3s;
+        }
+        #phoneInput::placeholder { color: #444; font-weight: normal; }
+        #phoneInput:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(255,215,0,0.1); }
+        .logged-in-text { font-size: 18px; font-weight: bold; color: var(--gold); display: none; }
+
+        /* ASSET CARDS */
+        .asset-container {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 15px; padding: 20px;
+            margin-top: -30px;
+        }
+        .asset-card {
+            background: var(--bg-card);
+            border: 1px solid #222;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        .asset-card i { font-size: 20px; color: var(--gold); margin-bottom: 10px; }
+        .asset-card p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+        .asset-card h3 { font-size: 16px; margin-top: 5px; }
+
+        /* MAIN BUTTONS (NẠP & RÚT) */
+        .action-row {
+            display: flex; gap: 15px; padding: 0 20px; margin-bottom: 25px;
+        }
+        .btn-main {
+            flex: 1; padding: 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            font-size: 14px;
+            transition: 0.3s;
+            position: relative; overflow: hidden;
+        }
+        .btn-deposit { background: var(--gold); color: #000; }
+        .btn-withdraw { background: #fff; color: #000; }
+        .btn-main::after {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: rgba(255,255,255,0.2);
+            transform: skewX(-30deg);
+            animation: shine 3s infinite;
+        }
+
+        /* MENU LIST */
+        .menu-list { padding: 0 20px; }
+        .menu-item {
+            background: var(--bg-card);
+            padding: 18px;
+            border-radius: 15px;
+            margin-bottom: 12px;
+            display: flex; align-items: center;
+            border: 1px solid #222;
+            transition: 0.3s;
+        }
+        .menu-item:active { transform: scale(0.97); background: var(--bg-item); }
+        .menu-icon {
+            width: 40px; height: 40px;
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 12px; margin-right: 15px;
+            font-size: 18px;
+        }
+        .menu-text { flex: 1; }
+        .menu-text h4 { font-size: 14px; }
+        .menu-text p { font-size: 11px; color: var(--text-muted); }
+        .arrow-right { color: #333; font-size: 12px; }
+
+        /* GÓI ĐANG ĐẦU TƯ SECTION (THÊM THEO YÊU CẦU) */
+        .investment-section { padding: 0 20px 20px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .section-header h3 { font-size: 16px; color: var(--gold); }
+        .invest-box {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 15px;
+            border-left: 4px solid var(--gold);
+            margin-bottom: 10px;
+        }
+        .invest-top { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .invest-name { font-weight: bold; font-size: 14px; }
+        .invest-profit { color: var(--green); font-size: 14px; font-weight: bold; }
+        .progress-bar { height: 6px; background: #222; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--gold); width: 65%; border-radius: 10px; }
+
+        /* BOTTOM NAVIGATION */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: #000; border-top: 1px solid #222;
+            display: flex; justify-content: space-around;
+            padding: 15px 0; z-index: 1000;
+        }
+        .nav-link { color: #555; text-align: center; }
+        .nav-link.active { color: var(--gold); }
+        .nav-link i { font-size: 20px; display: block; margin-bottom: 4px; }
+        .nav-link span { font-size: 10px; font-weight: 500; }
+
+        /* LOGOUT */
+        .logout-btn {
+            margin: 20px; text-align: center;
+            padding: 15px; border-radius: 15px;
+            border: 1px solid #333; color: var(--red);
+            font-size: 14px; font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-header">
+        <div class="avatar-wrapper">
+            <img src="https://i.pravatar.cc/150?u=butterless" alt="User">
+            <div class="vip-badge">VIP 3</div>
+        </div>
+
+        <div class="user-identity">
+            <div id="displayArea">
+                <input type="number" id="phoneInput" placeholder="Nhập SĐT của bạn..." onchange="saveAccount()">
+                <p id="phoneText" class="logged-in-text"></p>
+                <p style="font-size: 10px; color: #555; margin-top: 5px;">ID: <span id="userId">384920</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="asset-container">
+        <div class="asset-card">
+            <i class="fas fa-wallet"></i>
+            <p>Số dư ví</p>
+            <h3>1,250,000đ</h3>
+        </div>
+        <div class="asset-card">
+            <i class="fas fa-chart-line"></i>
+            <p>Lợi nhuận</p>
+            <h3 style="color: var(--green);">+350,000đ</h3>
+        </div>
+    </div>
+
+    <div class="action-row">
+        <a href="nap-tien.html" class="btn-main btn-deposit">
+            <i class="fas fa-plus-circle"></i> NẠP TIỀN
+        </a>
+        <a href="rut-tien.html" class="btn-main btn-withdraw">
+            <i class="fas fa-university"></i> RÚT TIỀN
+        </a>
+    </div>
+
+    <div class="investment-section">
+        <div class="section-header">
+            <h3>Gói đang đầu tư</h3>
+            <a href="quan-ly-dau-tu.html" style="font-size: 11px; color: var(--text-muted);">Xem tất cả</a>
+        </div>
+        <div class="invest-box">
+            <div class="invest-top">
+                <span class="invest-name">Gói VIP - Lãi 3.5%/ngày</span>
+                <span class="invest-profit">+105k/ngày</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 72%;"></div>
+            </div>
+            <p style="font-size: 10px; color: #555; margin-top: 5px;">Đã chạy: 12/20 ngày</p>
+        </div>
+    </div>
+
+    <div class="menu-list">
+        <a href="quan-ly-dau-tu.html" class="menu-item">
+            <div class="menu-icon"><i class="fas fa-layer-group"></i></div>
+            <div class="menu-text">
+                <h4>Quản lý đầu tư</h4>
+                <p>Xem tiến độ và nhận lãi hàng ngày</p>
+            </div>
+            <i class="fas fa-chevron-right arrow-right"></i>
+        </a>
+        <a href="doi-ngu.html" class="menu-item">
+            <div class="menu-icon"><i class="fas fa-users"></i></div>
+            <div class="menu-text">
+                <h4>Đội ngũ (Affiliate)</h4>
+                <p>Nhận hoa hồng lên đến 25%</p>
+            </div>
+            <i class="fas fa-chevron-right arrow-right"></i>
+        </a>
+        <div class="menu-item">
+            <div class="menu-icon"><i class="fas fa-shield-halved"></i></div>
+            <div class="menu-text">
+                <h4>Bảo mật tài khoản</h4>
+                <p>Đổi mật khẩu và mã PIN rút tiền</p>
+            </div>
+            <i class="fas fa-chevron-right arrow-right"></i>
+        </a>
+        <div class="menu-item">
+            <div class="menu-icon"><i class="fas fa-headset"></i></div>
+            <div class="menu-text">
+                <h4>Hỗ trợ khách hàng</h4>
+                <p>Liên hệ Admin (24/7)</p>
+            </div>
+            <i class="fas fa-chevron-right arrow-right"></i>
+        </a>
+    </div>
+
+    <div class="logout-btn" onclick="logout()">
+        <i class="fas fa-power-off"></i> ĐĂNG XUẤT TÀI KHOẢN
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Trang chủ</span>
+        </a>
+        <a href="quan-ly-dau-tu.html" class="nav-link">
+            <i class="fas fa-chart-pie"></i>
+            <span>Đầu tư</span>
+        </a>
+        <a href="nap-tien.html" class="nav-link">
+            <i class="fas fa-wallet"></i>
+            <span>Nạp tiền</span>
+        </a>
+        <a href="profile.html" class="nav-link active">
+            <i class="fas fa-user"></i>
+            <span>Cá nhân</span>
+        </a>
+    </nav>
+
+    <script>
+        // HÀM LƯU SĐT VÀO TRÌNH DUYỆT (LOCALSTORAGE)
+        function saveAccount() {
+            const phone = document.getElementById('phoneInput').value;
+            if(phone.length >= 10) {
+                localStorage.setItem('userPhone', phone);
+                renderUser();
+            } else {
+                alert("Số điện thoại không hợp lệ!");
+            }
+        }
+
+        // HÀM HIỂN THỊ SAU KHI LƯU HOẶC LOAD TRANG
+        function renderUser() {
+            const savedPhone = localStorage.getItem('userPhone');
+            const input = document.getElementById('phoneInput');
+            const text = document.getElementById('phoneText');
+
+            if(savedPhone) {
+                input.style.display = 'none';
+                text.innerText = "Xin chào: " + savedPhone;
+                text.style.display = 'block';
+            } else {
+                input.style.display = 'inline-block';
+                text.style.display = 'none';
+            }
+        }
+
+        // HÀM ĐĂNG XUẤT
+        function logout() {
+            if(confirm("Bạn muốn đăng xuất?")) {
+                localStorage.removeItem('userPhone');
+                renderUser();
+            }
+        }
+
+        // KIỂM TRA NGAY KHI MỞ TRANG (F5 CŨNG CHẠY)
+        window.onload = renderUser;
+    </script>
+
+</body>
+</html>
