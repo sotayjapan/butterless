@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quản Lý Đầu Tư | Butterless</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --gold: #FFD700;
+            --bg-main: #050505;
+            --bg-card: #111111;
+            --text-light: #f5f5f5;
+            --text-muted: #888888;
+            --green: #2ecc71;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-light); padding-bottom: 80px; }
+
+        /* Header */
+        .header { display: flex; align-items: center; padding: 15px 20px; background: #111; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 100; }
+        .back-btn { font-size: 20px; color: var(--gold); margin-right: 15px; text-decoration: none; }
+        .header-title { font-size: 18px; font-weight: bold; }
+
+        .container { padding: 20px; }
+
+        /* Tổng quan tài sản đầu tư */
+        .summary-card { 
+            background: linear-gradient(135deg, #1a1a1a, #000); 
+            border: 1px solid var(--gold); 
+            border-radius: 20px; 
+            padding: 20px; 
+            margin-bottom: 25px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .summary-item { text-align: left; }
+        .summary-item p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; }
+        .summary-item h3 { font-size: 18px; color: #fff; }
+        .total-profit { color: var(--green) !important; }
+
+        /* Danh sách gói */
+        .section-title { font-size: 16px; font-weight: bold; color: var(--gold); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        
+        .investment-card { 
+            background: var(--bg-card); 
+            border: 1px solid #222; 
+            border-radius: 15px; 
+            padding: 15px; 
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        .status-tag { 
+            position: absolute; top: 0; right: 0; 
+            background: rgba(46, 204, 113, 0.2); color: var(--green); 
+            font-size: 10px; padding: 5px 12px; border-bottom-left-radius: 12px; font-weight: bold;
+        }
+
+        .pkg-name { font-size: 15px; font-weight: bold; margin-bottom: 10px; color: var(--gold); }
+        
+        .pkg-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .info-box span { display: block; font-size: 11px; color: var(--text-muted); }
+        .info-box strong { font-size: 14px; color: #fff; }
+
+        /* Thanh tiến trình thời gian */
+        .progress-container { margin: 10px 0; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 10px; color: #888; margin-bottom: 5px; }
+        .progress-bar { width: 100%; height: 6px; background: #222; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--gold); border-radius: 10px; transition: width 1s ease-in-out; }
+
+        .time-left { font-size: 12px; color: #aaa; display: flex; align-items: center; gap: 5px; margin-top: 10px; }
+        .time-left i { color: var(--gold); }
+
+        /* Bottom Nav (Copy từ Index) */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #111; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #222; }
+        .nav-item { color: #555; font-size: 22px; text-decoration: none; }
+        .nav-item.active { color: var(--gold); }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="header-title">Quản Lý Gói Đầu Tư</div>
+    </header>
+
+    <div class="container">
+        <div class="summary-card">
+            <div class="summary-item">
+                <p>Vốn đang chạy</p>
+                <h3>15,000,000đ</h3>
+            </div>
+            <div class="summary-item">
+                <p>Lợi nhuận tạm tính</p>
+                <h3 class="total-profit">+2,450,000đ</h3>
+            </div>
+        </div>
+
+        <h2 class="section-title"><i class="fas fa-box-open"></i> Gói đang hoạt động (02)</h2>
+
+        <div class="investment-card">
+            <div class="status-tag">ĐANG SINH LỜI</div>
+            <div class="pkg-name">Gói VIP - Chuyên Nghiệp</div>
+            
+            <div class="pkg-info-grid">
+                <div class="info-box">
+                    <span>Số vốn</span>
+                    <strong>10,000,000đ</strong>
+                </div>
+                <div class="info-box">
+                    <span>Lợi nhuận/Ngày</span>
+                    <strong style="color: var(--green)">+350,000đ</strong>
+                </div>
+                <div class="info-box">
+                    <span>Ngày bắt đầu</span>
+                    <strong>10/03/2024</strong>
+                </div>
+                <div class="info-box">
+                    <span>Tổng nhận dự kiến</span>
+                    <strong>21,000,000đ</strong>
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Tiến độ hoàn thành</span>
+                    <span>45%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 45%;"></div>
+                </div>
+            </div>
+
+            <div class="time-left">
+                <i class="fas fa-clock"></i> 
+                Lãi tiếp theo: <span id="timer1" style="color: #fff; font-weight: bold;">12:45:30</span>
+            </div>
+        </div>
+
+        <div class="investment-card">
+            <div class="status-tag">ĐANG SINH LỜI</div>
+            <div class="pkg-name">Gói Khởi Nghiệp</div>
+            
+            <div class="pkg-info-grid">
+                <div class="info-box">
+                    <span>Số vốn</span>
+                    <strong>5,000,000đ</strong>
+                </div>
+                <div class="info-box">
+                    <span>Lợi nhuận/Ngày</span>
+                    <strong style="color: var(--green)">+100,000đ</strong>
+                </div>
+                <div class="info-box">
+                    <span>Ngày bắt đầu</span>
+                    <strong>01/03/2024</strong>
+                </div>
+                <div class="info-box">
+                    <span>Tổng nhận dự kiến</span>
+                    <strong>8,000,000đ</strong>
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Tiến độ hoàn thành</span>
+                    <span>80%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 80%;"></div>
+                </div>
+            </div>
+
+            <div class="time-left">
+                <i class="fas fa-clock"></i> 
+                Lãi tiếp theo: <span id="timer2" style="color: #fff; font-weight: bold;">08:15:10</span>
+            </div>
+        </div>
+
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i></a>
+        <a href="quan-ly-dau-tu.html" class="nav-item active"><i class="fas fa-layer-group"></i></a>
+        <a href="nap-tien.html" class="nav-item"><i class="fas fa-wallet"></i></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i></a>
+    </nav>
+
+    <script>
+        // Hàm chạy đồng hồ đếm ngược ảo
+        function startTimer(displayId) {
+            let h = 12, m = 45, s = 30;
+            setInterval(() => {
+                s--;
+                if(s < 0) { s = 59; m--; }
+                if(m < 0) { m = 59; h--; }
+                let timeStr = 
+                    (h < 10 ? "0"+h : h) + ":" + 
+                    (m < 10 ? "0"+m : m) + ":" + 
+                    (s < 10 ? "0"+s : s);
+                document.getElementById(displayId).innerText = timeStr;
+            }, 1000);
+        }
+        startTimer('timer1');
+        startTimer('timer2');
+    </script>
+</body>
+</html>
