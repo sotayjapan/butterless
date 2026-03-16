@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NẠP TIỀN HỆ THỐNG | BUTTERLESS</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --gold: #FFD700;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fcf6ba 55%, #aa771c 100%);
+            --bg: #050505;
+            --card: #111111;
+            --border: rgba(255, 215, 0, 0.2);
+            --red: #ff4d4d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; padding-bottom: 30px; }
+
+        header {
+            padding: 20px; display: flex; align-items: center; gap: 15px;
+            background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border);
+        }
+        header a { color: var(--gold); text-decoration: none; }
+        header h2 { font-family: 'Orbitron'; font-size: 16px; letter-spacing: 1px; }
+
+        .container { padding: 20px; }
+
+        .deposit-card {
+            background: var(--card); border-radius: 30px; border: 1px solid var(--border);
+            padding: 25px; margin-bottom: 20px;
+        }
+
+        /* QR AREA */
+        .qr-wrapper {
+            background: #fff; padding: 12px; border-radius: 20px;
+            width: 240px; height: 240px; margin: 0 auto 20px;
+            box-shadow: 0 0 25px rgba(255,215,0,0.15);
+        }
+        .qr-wrapper img { width: 100%; height: 100%; object-fit: contain; }
+
+        /* NỘI DUNG QUAN TRỌNG */
+        .memo-highlight {
+            background: rgba(255, 77, 77, 0.1); border: 1px solid var(--red);
+            padding: 15px; border-radius: 18px; text-align: center; margin-bottom: 20px;
+        }
+        .memo-highlight span { font-size: 11px; color: var(--red); font-weight: 800; display: block; margin-bottom: 5px; }
+        .memo-highlight b { font-family: 'Orbitron'; font-size: 22px; color: #fff; letter-spacing: 2px; display: block; }
+        
+        .copy-btn {
+            background: var(--gold-gradient); color: #000; padding: 6px 15px;
+            border-radius: 10px; font-size: 10px; font-weight: 900; 
+            display: inline-block; margin-top: 10px; cursor: pointer;
+        }
+
+        .info-list { background: #000; border-radius: 20px; padding: 10px 20px; margin-bottom: 20px; }
+        .info-item {
+            display: flex; justify-content: space-between; padding: 15px 0;
+            border-bottom: 1px solid #111; font-size: 13px;
+        }
+        .info-item:last-child { border: none; }
+        .info-item span:first-child { color: #666; font-weight: 600; }
+        .info-item span:last-child { color: #fff; font-weight: 700; }
+
+        .btn-done {
+            width: 100%; padding: 20px; border-radius: 20px; border: none;
+            background: var(--gold-gradient); color: #000; font-weight: 900;
+            font-family: 'Orbitron'; cursor: pointer;
+        }
+
+        .warning-text {
+            color: var(--red); font-size: 11px; text-align: center;
+            margin-top: 15px; font-weight: 700; line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html"><i class="fas fa-arrow-left"></i></a>
+        <h2>THANH TOÁN HÓA ĐƠN</h2>
+    </header>
+
+    <div class="container">
+        <div class="deposit-card animate__animated animate__fadeIn">
+            <div class="qr-wrapper">
+                <img src="qr-image.png" alt="Mã QR Thanh Toán">
+            </div>
+
+            <div class="memo-highlight">
+                <span>BẮT BUỘC NHẬP NỘI DUNG NÀY:</span>
+                <b id="memo-code">---</b>
+                <div class="copy-btn" onclick="copyMemo()">SAO CHÉP MÃ</div>
+            </div>
+
+            <div class="info-list">
+                <div class="info-item"><span>Ngân hàng</span><span>MB BANK</span></div>
+                <div class="info-item"><span>Số tài khoản</span><span>0366993985</span></div>
+                <div class="info-item"><span>Chủ tài khoản</span><span>BUTTERLESS ADMIN</span></div>
+                <div class="info-item"><span>Số tiền</span><span id="final-amt" style="color:var(--gold)">0đ</span></div>
+            </div>
+
+            <button class="btn-done" onclick="completePayment()">XÁC NHẬN ĐÃ CHUYỂN TIỀN</button>
+
+            <div class="warning-text">
+                <i class="fas fa-exclamation-triangle"></i> LƯU Ý: Nếu sai nội dung, hệ thống sẽ không thể xác minh và cộng tiền tự động cho bạn!
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        const supabase = createClient('https://fgartftwimourooudcrp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o');
+
+        // Lấy SĐT từ bộ nhớ để tạo mã memo
+        const phone = localStorage.getItem('user_session');
+        
+        // Giả lập lấy số tiền từ trang trước (Nếu không có mặc định 200k)
+        const amtFromPrev = localStorage.getItem('temp_deposit_amt') || 200000;
+
+        window.onload = () => {
+            if(!phone) { window.location.href = 'login.html'; return; }
+            document.getElementById('memo-code').innerText = "NAP " + phone;
+            document.getElementById('final-amt').innerText = Number(amtFromPrev).toLocaleString() + "đ";
+        };
+
+        window.copyMemo = () => {
+            const code = document.getElementById('memo-code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                alert("Đã sao chép nội dung: " + code);
+            });
+        };
+
+        window.completePayment = async () => {
+            // Ghi yêu cầu vào Supabase để bạn vào duyệt
+            const { error } = await supabase.from('history').insert([{
+                phone: phone,
+                type: 'Nạp tiền',
+                amount: parseInt(amtFromPrev),
+                status: 'Chờ duyệt' // Trạng thái này để bạn biết mà check ngân hàng
+            }]);
+
+            if(!error) {
+                alert("Hệ thống đã ghi nhận. Vui lòng giữ hóa đơn chuyển tiền để đối chiếu nếu cần!");
+                window.location.href = 'index.html';
+            } else {
+                alert("Lỗi kết nối database!");
+            }
+        };
+    </script>
+</body>
+</html>
