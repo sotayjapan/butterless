@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RÚT VỐN QUANTUM | VIP SYSTEM</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --gold: #FFD700;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fcf6ba 55%, #aa771c 100%);
+            --bg: #050505;
+            --card: rgba(15, 15, 15, 0.98);
+            --border: rgba(255, 215, 0, 0.15);
+            --text-dim: #888;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+        /* --- HEADER --- */
+        header { 
+            padding: 20px; display: flex; align-items: center; gap: 15px; 
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
+        }
+        header h2 { font-family: 'Orbitron'; font-size: 13px; color: var(--gold); letter-spacing: 2px; font-weight: 900; }
+        header a { color: var(--gold); font-size: 18px; text-decoration: none; }
+
+        .container { padding: 20px; padding-bottom: 100px; }
+
+        /* --- BALANCE CARD --- */
+        .balance-display {
+            text-align: center; margin-bottom: 25px; animation: fadeInDown 0.8s;
+        }
+        .balance-display p { font-size: 10px; color: var(--text-dim); font-family: 'Orbitron'; letter-spacing: 2px; }
+        .balance-display h1 { font-family: 'Orbitron'; color: var(--gold); font-size: 30px; text-shadow: 0 0 15px rgba(255,215,0,0.3); }
+
+        /* --- VIP FORM --- */
+        .vip-card {
+            background: var(--card); border-radius: 25px; border: 1px solid var(--border);
+            padding: 22px; position: relative; overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .vip-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,215,0,0.03) 0%, transparent 70%);
+        }
+
+        .label { 
+            font-size: 9px; color: var(--gold); text-transform: uppercase; 
+            letter-spacing: 2px; margin-bottom: 15px; display: block; font-weight: 900; 
+        }
+
+        .input-group { margin-bottom: 15px; position: relative; }
+        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #444; font-size: 14px; }
+        
+        .input-group select, .input-group input {
+            width: 100%; background: #000; border: 1px solid #1a1a1a; padding: 15px 15px 15px 45px;
+            border-radius: 12px; color: #fff; outline: none; font-size: 13px; transition: 0.4s;
+            font-weight: 600;
+        }
+        .input-group input:focus { border-color: var(--gold); background: #080808; box-shadow: 0 0 15px rgba(255,215,0,0.05); }
+
+        .btn-withdraw {
+            width: 100%; padding: 18px; border-radius: 15px; border: none;
+            background: var(--gold-gradient); color: #000; font-weight: 900;
+            font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; 
+            font-size: 13px; margin-top: 10px; transition: 0.3s;
+        }
+        .btn-withdraw:active { transform: scale(0.95); }
+        .btn-withdraw:disabled { background: #1a1a1a; color: #444; cursor: not-allowed; border: 1px solid #222; }
+
+        /* --- HISTORY LIST --- */
+        .history-box { margin-top: 35px; }
+        .history-list {
+            background: #0a0a0a; border-radius: 20px; border: 1px solid #111;
+            min-height: 150px; overflow: hidden;
+        }
+        .empty-text { text-align: center; padding: 40px 20px; color: #333; }
+        .empty-text i { font-size: 35px; margin-bottom: 10px; display: block; }
+        
+        .h-item {
+            padding: 18px; border-bottom: 1px solid #111;
+            display: flex; justify-content: space-between; align-items: center;
+            animation: fadeInRight 0.5s ease-out;
+        }
+        .h-item:last-child { border-bottom: none; }
+        .h-info div:first-child { font-size: 12px; font-weight: 800; color: #eee; margin-bottom: 4px; }
+        .h-info div:last-child { font-size: 9px; color: #555; font-family: 'Orbitron'; }
+        .h-status { text-align: right; }
+        .h-status b { color: var(--gold); font-family: 'Orbitron'; font-size: 13px; display: block; }
+        .h-status span { font-size: 9px; font-weight: 900; text-transform: uppercase; }
+
+        #lock-msg {
+            background: rgba(255, 77, 77, 0.1); border: 1px solid rgba(255, 77, 77, 0.2);
+            padding: 12px; border-radius: 12px; color: #ff4d4d; font-size: 10px;
+            text-align: center; margin-top: 15px; font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html"><i class="fas fa-arrow-left"></i></a>
+        <h2>RÚT VỐN ĐẦU TƯ</h2>
+    </header>
+
+    <div class="container">
+        <div class="balance-display">
+            <p>SỐ DƯ HIỆN TẠI</p>
+            <h1 id="user-balance">0đ</h1>
+        </div>
+
+        <div class="vip-card animate__animated animate__fadeInUp">
+            <span class="label"><i class="fas fa-shield-check"></i> Xác thực thụ hưởng</span>
+            
+            <div class="input-group">
+                <i class="fas fa-university"></i>
+                <select id="bank-name">
+                    <option value="">-- CHỌN NGÂN HÀNG --</option>
+                    <option value="Vietcombank">Vietcombank</option>
+                    <option value="MB Bank">MB Bank</option>
+                    <option value="Techcombank">Techcombank</option>
+                    <option value="Momo">Ví Momo</option>
+                    <option value="ZaloPay">ZaloPay</option>
+                    <option value="BIDV">BIDV</option>
+                    <option value="Agribank">Agribank</option>
+                    <option value="Vietinbank">Vietinbank</option>
+                    <option value="ACB">ACB</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-credit-card"></i>
+                <input type="text" id="bank-number" placeholder="SỐ TÀI KHOẢN">
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-user-tie"></i>
+                <input type="text" id="bank-user" placeholder="CHỦ TÀI KHOẢN (KHÔNG DẤU)">
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-coins"></i>
+                <input type="number" id="draw-amt" placeholder="SỐ TIỀN MUỐN RÚT">
+            </div>
+
+            <button class="btn-withdraw" id="btn-action" onclick="handleWithdraw()">XÁC NHẬN RÚT TIỀN</button>
+            
+            <div id="lock-msg" style="display: none;">
+                <i class="fas fa-lock"></i> TÀI KHOẢN CHƯA KÍCH HOẠT RÚT TIỀN. VUI LÒNG NẠP TIỀN ĐỂ MỞ KHÓA.
+            </div>
+        </div>
+
+        <div class="history-box">
+            <span class="label">Lịch sử giao dịch</span>
+            <div class="history-list" id="history-container">
+                <div class="empty-text">
+                    <i class="fas fa-cube"></i>
+                    <p>Đang tải dữ liệu...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        const supabase = createClient('https://fgartftwimourooudcrp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o');
+
+        const phone = localStorage.getItem('user_session');
+        let currentBalance = 0;
+
+        async function init() {
+            if(!phone) { window.location.href = 'login.html'; return; }
+
+            // 1. Tải số dư
+            const { data: user } = await supabase.from('users').select('balance').eq('phone', phone).single();
+            if(user) {
+                currentBalance = user.balance;
+                document.getElementById('user-balance').innerText = currentBalance.toLocaleString() + 'đ';
+            }
+
+            // 2. Kiểm tra điều kiện nạp để mở khóa rút
+            const { data: deposits } = await supabase.from('history')
+                .select('id')
+                .eq('phone', phone)
+                .eq('type', 'Nạp tiền')
+                .eq('status', 'Thành công')
+                .limit(1);
+
+            if(!deposits || deposits.length === 0) {
+                document.getElementById('btn-action').disabled = true;
+                document.getElementById('lock-msg').style.display = 'block';
+            }
+
+            // 3. Tải lịch sử rút
+            loadWithdrawHistory();
+        }
+
+        async function loadWithdrawHistory() {
+            const { data: logs } = await supabase.from('history')
+                .select('*')
+                .eq('phone', phone)
+                .eq('type', 'Rút tiền')
+                .order('created_at', { ascending: false });
+
+            const container = document.getElementById('history-container');
+            if(logs && logs.length > 0) {
+                container.innerHTML = logs.map(w => `
+                    <div class="h-item">
+                        <div class="h-info">
+                            <div>${w.note.split(' - ')[0]}</div>
+                            <div>${new Date(w.created_at).toLocaleString()}</div>
+                        </div>
+                        <div class="h-status">
+                            <b>-${w.amount.toLocaleString()}đ</b>
+                            <span style="color: ${w.status === 'Thành công' ? '#00ff88' : 'var(--gold)'}">${w.status}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = '<div class="empty-text"><i class="fas fa-file-invoice"></i><p>Chưa có lệnh rút nào</p></div>';
+            }
+        }
+
+        window.handleWithdraw = async () => {
+            const bank = document.getElementById('bank-name').value;
+            const num = document.getElementById('bank-number').value;
+            const user = document.getElementById('bank-user').value;
+            const amt = parseInt(document.getElementById('draw-amt').value);
+
+            if(!bank || !num || !user || isNaN(amt)) return alert("Vui lòng nhập đủ thông tin!");
+            if(amt < 100000) return alert("Rút tối thiểu 100,000đ");
+            if(amt > currentBalance) return alert("Số dư khả dụng không đủ!");
+
+            const btn = document.getElementById('btn-action');
+            btn.disabled = true;
+            btn.innerText = "ĐANG KHỞI TẠO...";
+
+            try {
+                // Bước 1: Trừ tiền ví
+                await supabase.from('users').update({ balance: currentBalance - amt }).eq('phone', phone);
+                
+                // Bước 2: Lưu lịch sử
+                await supabase.from('history').insert([{
+                    phone: phone,
+                    type: 'Rút tiền',
+                    amount: amt,
+                    status: 'Chờ duyệt',
+                    note: `${bank} - ${num} - ${user}`
+                }]);
+
+                alert("🚀 Gửi yêu cầu rút tiền thành công! Vui lòng đợi xét duyệt.");
+                location.reload();
+            } catch (err) {
+                alert("Lỗi: " + err.message);
+                btn.disabled = false;
+                btn.innerText = "XÁC NHẬN RÚT TIỀN";
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
