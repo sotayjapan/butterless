@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ĐĂNG KÝ THÀNH VIÊN | BUTTERLESS SYSTEM</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --gold: #FFD700;
+            --gold-gradient: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728, #fcf6ba, #aa771c);
+            --bg: #050505;
+            --card: rgba(15, 15, 15, 0.95);
+            --border: rgba(255, 215, 0, 0.2);
+            --text-dim: #888888;
+        }
+
+        /* --- NỀN TẢNG --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background: var(--bg); color: #fff; 
+            font-family: 'Inter', sans-serif; 
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            overflow-x: hidden; padding: 20px 0;
+        }
+
+        #reg-canvas { position: fixed; top: 0; left: 0; z-index: 1; opacity: 0.3; }
+
+        /* --- FORM ĐĂNG KÝ --- */
+        .reg-container {
+            width: 90%; max-width: 420px; padding: 40px 25px;
+            background: var(--card); border-radius: 40px; border: 1px solid var(--border);
+            backdrop-filter: blur(20px); z-index: 10;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            text-align: center;
+        }
+
+        .header-area { margin-bottom: 30px; }
+        .header-area i { font-size: 45px; color: var(--gold); margin-bottom: 15px; }
+        .header-area h1 { font-family: 'Orbitron'; font-size: 20px; letter-spacing: 2px; }
+        .header-area p { font-size: 11px; color: var(--gold); font-weight: 700; margin-top: 5px; }
+
+        /* --- INPUTS --- */
+        .input-box { position: relative; margin-bottom: 18px; text-align: left; }
+        .input-box label { 
+            display: block; font-size: 10px; color: var(--text-dim); 
+            margin-bottom: 6px; font-weight: 800; padding-left: 10px;
+        }
+        .input-box i { position: absolute; left: 20px; bottom: 18px; color: var(--gold); font-size: 16px; }
+        .input-box input {
+            width: 100%; padding: 16px 20px 16px 50px;
+            background: #000; border: 1px solid #222; border-radius: 18px;
+            color: #fff; font-size: 14px; transition: 0.3s;
+        }
+        .input-box input:focus { border-color: var(--gold); outline: none; }
+
+        /* --- BUTTONS --- */
+        .btn-reg {
+            width: 100%; padding: 18px; border-radius: 18px; border: none;
+            background: var(--gold-gradient); color: #000;
+            font-weight: 900; font-size: 14px; font-family: 'Orbitron';
+            cursor: pointer; margin-top: 10px; box-shadow: 0 10px 20px rgba(255,215,0,0.2);
+        }
+        
+        .error-alert {
+            background: rgba(255, 77, 77, 0.1); color: #ff4d4d;
+            padding: 12px; border-radius: 12px; font-size: 12px;
+            margin-bottom: 20px; display: none; border: 1px solid rgba(255,77,77,0.2);
+        }
+
+        .loader {
+            width: 20px; height: 20px; border: 3px solid #000; border-top: 3px solid transparent;
+            border-radius: 50%; display: none; animation: spin 0.8s linear infinite; margin: 0 auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .back-link { margin-top: 25px; font-size: 13px; color: var(--text-dim); }
+        .back-link a { color: var(--gold); text-decoration: none; font-weight: 800; }
+    </style>
+</head>
+<body>
+
+    <canvas id="reg-canvas"></canvas>
+
+    <div class="reg-container animate__animated animate__fadeIn">
+        <div class="header-area">
+            <i class="fas fa-user-plus"></i>
+            <h1>TẠO TÀI KHOẢN</h1>
+            <p>BẮT ĐẦU HÀNH TRÌNH THỊNH VƯỢNG</p>
+        </div>
+
+        <div id="msg" class="error-alert"></div>
+
+        <div class="input-box">
+            <label>SỐ ĐIỆN THOẠI (Dùng làm ID)</label>
+            <i class="fas fa-phone"></i>
+            <input type="tel" id="reg-phone" placeholder="Nhập số điện thoại...">
+        </div>
+
+        <div class="input-box">
+            <label>MẬT KHẨU</label>
+            <i class="fas fa-lock"></i>
+            <input type="password" id="reg-pass" placeholder="Tạo mật khẩu bảo mật...">
+        </div>
+
+        <div class="input-box">
+            <label>MÃ GIỚI THIỆU (NẾU CÓ)</label>
+            <i class="fas fa-users"></i>
+            <input type="text" id="reg-ref" placeholder="Mã người mời...">
+        </div>
+
+        <button class="btn-reg" onclick="window.processRegister()">
+            <span id="txt">ĐĂNG KÝ NGAY</span>
+            <div class="loader" id="ld"></div>
+        </button>
+
+        <div class="back-link">
+            Đã có tài khoản? <a href="login.html">Đăng nhập</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        
+        const supabase = createClient('https://fgartftwimourooudcrp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o');
+
+        window.processRegister = async () => {
+            const phone = document.getElementById('reg-phone').value.trim();
+            const pass = document.getElementById('reg-pass').value.trim();
+            const ref = document.getElementById('reg-ref').value.trim();
+            const msg = document.getElementById('msg');
+            const ld = document.getElementById('ld');
+            const txt = document.getElementById('txt');
+
+            if(!phone || !pass) {
+                showMsg("Vui lòng điền đủ SĐT và Mật khẩu!");
+                return;
+            }
+
+            // Bật loading
+            txt.style.display = 'none';
+            ld.style.display = 'block';
+            msg.style.display = 'none';
+
+            try {
+                // 1. Kiểm tra SĐT đã tồn tại chưa
+                const { data: existingUser } = await supabase
+                    .from('users')
+                    .select('phone')
+                    .eq('phone', phone)
+                    .single();
+
+                if (existingUser) {
+                    showMsg("Số điện thoại này đã được đăng ký!");
+                } else {
+                    // 2. Thêm người dùng mới
+                    const { error } = await supabase.from('users').insert([{
+                        phone: phone,
+                        password: pass,
+                        balance: 0,
+                        is_gift_claimed: false,
+                        has_invested: false,
+                        ref_by: ref || 'Hệ thống'
+                    }]);
+
+                    if(!error) {
+                        alert("Đăng ký thành công! Chào mừng bạn.");
+                        localStorage.setItem('user_session', phone);
+                        window.location.href = 'index.html';
+                    } else {
+                        showMsg("Lỗi tạo tài khoản. Thử lại sau!");
+                    }
+                }
+            } catch (e) {
+                showMsg("Lỗi kết nối máy chủ!");
+            } finally {
+                txt.style.display = 'block';
+                ld.style.display = 'none';
+            }
+        };
+
+        function showMsg(t) {
+            const msg = document.getElementById('msg');
+            msg.innerText = t;
+            msg.style.display = 'block';
+        }
+
+        // Canvas hiệu ứng nền (Viết ngắn gọn để đảm bảo hiệu năng)
+        const canvas = document.getElementById('reg-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particles = Array.from({length: 50}, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            v: Math.random() * 0.5 + 0.2
+        }));
+        function draw() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = "rgba(255,215,0,0.3)";
+            particles.forEach(p => {
+                ctx.beginPath(); ctx.arc(p.x, p.y, 1, 0, Math.PI*2); ctx.fill();
+                p.y -= p.v; if(p.y < 0) p.y = canvas.height;
+            });
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+</body>
+</html>
