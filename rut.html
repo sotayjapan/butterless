@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RÚT TIỀN QUANTUM | VIP</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --gold: #FFD700;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fcf6ba 55%, #aa771c 100%);
+            --bg: #000;
+            --card: rgba(20, 20, 20, 0.95);
+            --border: rgba(255, 215, 0, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+        header { padding: 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid var(--border); }
+        header h2 { font-family: 'Orbitron'; font-size: 16px; color: var(--gold); letter-spacing: 2px; }
+
+        .container { padding: 20px; }
+
+        /* Card form */
+        .vip-card {
+            background: var(--card); border-radius: 30px; border: 1px solid var(--border);
+            padding: 25px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+
+        .label { font-size: 10px; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; display: block; font-weight: 800; }
+
+        /* Input Styles */
+        .input-group { margin-bottom: 18px; }
+        .input-group select, .input-group input {
+            width: 100%; background: #0a0a0a; border: 1px solid #222; padding: 15px;
+            border-radius: 15px; color: #fff; outline: none; font-size: 14px; transition: 0.3s;
+        }
+        .input-group input:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(255,215,0,0.1); }
+
+        .btn-withdraw {
+            width: 100%; padding: 20px; border-radius: 20px; border: none;
+            background: var(--gold-gradient); color: #000; font-weight: 900;
+            font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; font-size: 14px;
+        }
+        .btn-withdraw:disabled { background: #333; color: #666; cursor: not-allowed; }
+
+        /* Lịch sử trống */
+        .history-box { margin-top: 20px; }
+        .history-list {
+            background: rgba(10,10,10,0.5); border-radius: 20px; border: 1px dashed #222;
+            min-height: 120px; display: flex; align-items: center; justify-content: center;
+        }
+        .empty-text { text-align: center; color: #444; }
+        .empty-text i { font-size: 30px; margin-bottom: 10px; display: block; }
+        
+        /* Item lịch sử khi có dữ liệu */
+        .h-item {
+            width: 100%; padding: 15px; border-bottom: 1px solid #111;
+            display: flex; justify-content: space-between;
+        }
+        .h-item b { color: var(--gold); font-family: 'Orbitron'; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" style="color:var(--gold)"><i class="fas fa-chevron-left"></i></a>
+        <h2>RÚT VỐN ĐẦU TƯ</h2>
+    </header>
+
+    <div class="container">
+        <div class="vip-card animate__animated animate__fadeInUp">
+            <span class="label">Thông tin thụ hưởng</span>
+            
+            <div class="input-group">
+                <select id="bank-name">
+                    <option value="">-- CHỌN NGÂN HÀNG --</option>
+                    <option value="Vietcombank">Vietcombank</option>
+                    <option value="MB Bank">MB Bank</option>
+                    <option value="BIDV">BIDV</option>
+                    <option value="Techcombank">Techcombank</option>
+                    <option value="Agribank">Agribank</option>
+                    <option value="Vietinbank">Vietinbank</option>
+                    <option value="VPBank">VPBank</option>
+                    <option value="TPBank">TPBank</option>
+                    <option value="ACB">ACB</option>
+                    <option value="Sacombank">Sacombank</option>
+                    <option value="SHB">SHB</option>
+                    <option value="Momo">Momo</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="bank-number" placeholder="SỐ TÀI KHOẢN">
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="bank-user" placeholder="HỌ VÀ TÊN CHỦ THẺ (KHÔNG DẤU)">
+            </div>
+
+            <div class="input-group">
+                <input type="number" id="draw-amt" placeholder="SỐ TIỀN MUỐN RÚT">
+            </div>
+
+            <button class="btn-withdraw" id="btn-action" onclick="handleWithdraw()">GỬI LỆNH RÚT TIỀN</button>
+            <p id="lock-msg" style="color: #ff4d4d; font-size: 11px; text-align: center; margin-top: 10px; display: none;">
+                <i class="fas fa-lock"></i> Bạn cần nạp tiền ít nhất 1 lần để kích hoạt tính năng rút.
+            </p>
+        </div>
+
+        <div class="history-box">
+            <span class="label">Lịch sử rút tiền</span>
+            <div class="history-list" id="history-container">
+                <div class="empty-text">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <p>Chưa có lịch sử giao dịch</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        const supabase = createClient('https://fgartftwimourooudcrp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o');
+
+        const phone = localStorage.getItem('user_session');
+        let canWithdraw = false;
+
+        async function checkEligibility() {
+            if(!phone) return;
+
+            // KIỂM TRA ĐIỀU KIỆN: Đã từng nạp tiền thành công chưa?
+            const { data: deposits } = await supabase.from('history')
+                .select('*')
+                .eq('phone', phone)
+                .eq('type', 'Nạp tiền')
+                .eq('status', 'Thành công');
+
+            if(deposits && deposits.length > 0) {
+                canWithdraw = true;
+            } else {
+                document.getElementById('btn-action').disabled = true;
+                document.getElementById('lock-msg').style.display = 'block';
+            }
+
+            // Tải lịch sử rút
+            const { data: withdrawals } = await supabase.from('history')
+                .select('*')
+                .eq('phone', phone)
+                .eq('type', 'Rút tiền')
+                .order('created_at', { ascending: false });
+
+            if(withdrawals && withdrawals.length > 0) {
+                const html = withdrawals.map(w => `
+                    <div class="h-item">
+                        <div>
+                            <div style="font-size:12px">${w.note.split(' - ')[0]}</div>
+                            <div style="font-size:10px; color:#555">${new Date(w.created_at).toLocaleString()}</div>
+                        </div>
+                        <div style="text-align:right">
+                            <b>-${w.amount.toLocaleString()}đ</b>
+                            <div style="font-size:10px; color:var(--gold)">${w.status}</div>
+                        </div>
+                    </div>
+                `).join('');
+                document.getElementById('history-container').innerHTML = html;
+                document.getElementById('history-container').style.display = 'block';
+            }
+        }
+
+        window.handleWithdraw = async () => {
+            if(!canWithdraw) return alert("Bạn chưa đủ điều kiện rút tiền!");
+
+            const bank = document.getElementById('bank-name').value;
+            const num = document.getElementById('bank-number').value;
+            const user = document.getElementById('bank-user').value;
+            const amt = parseInt(document.getElementById('draw-amt').value);
+
+            if(!bank || !num || !user || isNaN(amt)) return alert("Vui lòng nhập đầy đủ thông tin!");
+            if(amt < 100000) return alert("Rút tối thiểu 100,000đ");
+
+            // Kiểm tra số dư thực tế
+            const { data: uData } = await supabase.from('users').select('balance').eq('phone', phone).single();
+            if(uData.balance < amt) return alert("Số dư không đủ!");
+
+            const btn = document.getElementById('btn-action');
+            btn.innerText = "ĐANG XỬ LÝ...";
+
+            // Thực hiện trừ tiền và lưu lịch sử
+            await supabase.from('users').update({ balance: uData.balance - amt }).eq('phone', phone);
+            await supabase.from('history').insert([{
+                phone: phone,
+                type: 'Rút tiền',
+                amount: amt,
+                status: 'Chờ duyệt',
+                note: `${bank} - ${num} - ${user}`
+            }]);
+
+            alert("✨ Lệnh rút đã được gửi! Vui lòng chờ hệ thống phê duyệt.");
+            location.reload();
+        }
+
+        checkEligibility();
+    </script>
+</body>
+</html>
