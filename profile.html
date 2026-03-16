@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HỒ SƠ VIP | BUTTERLESS QUANTUM</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --gold: #FFD700;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fcf6ba 55%, #aa771c 100%);
+            --bg: #000;
+            --card: rgba(15, 15, 15, 0.95);
+            --border: rgba(255, 215, 0, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; padding-bottom: 100px; }
+
+        /* Header Cá Nhân */
+        .profile-header {
+            background: radial-gradient(circle at top, #1a1a00 0%, #000 100%);
+            padding: 50px 20px 40px; text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .avatar-wrapper {
+            width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--gold);
+            margin: 0 auto 15px; display: flex; align-items: center; justify-content: center;
+            background: #050505; box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
+            position: relative;
+        }
+        .avatar-wrapper i { font-size: 40px; color: var(--gold); }
+        .vip-badge {
+            position: absolute; bottom: 0; right: 0; background: var(--gold-gradient);
+            color: #000; font-size: 9px; font-weight: 900; padding: 3px 8px;
+            border-radius: 10px; font-family: 'Orbitron';
+        }
+
+        .user-info h2 { font-family: 'Orbitron'; font-size: 18px; letter-spacing: 1px; color: #fff; }
+        .user-info p { font-size: 11px; color: #555; margin-top: 5px; text-transform: uppercase; font-weight: 700; }
+
+        .container { padding: 20px; margin-top: -30px; }
+
+        /* Thẻ Ví Tiền */
+        .wallet-card {
+            background: var(--card); border-radius: 30px; border: 1.5px solid var(--border);
+            padding: 25px; backdrop-filter: blur(15px); box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            text-align: center;
+        }
+        .wallet-card span { font-size: 10px; color: #888; letter-spacing: 2px; text-transform: uppercase; }
+        .wallet-card h1 { 
+            font-family: 'Orbitron'; font-size: 30px; color: var(--gold); 
+            margin: 12px 0; text-shadow: 0 0 15px rgba(255,215,0,0.3); 
+        }
+
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .p-btn {
+            padding: 14px; border-radius: 15px; text-decoration: none; font-size: 12px;
+            font-weight: 800; font-family: 'Orbitron'; display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: 0.3s;
+        }
+        .p-btn.deposit { background: var(--gold-gradient); color: #000; }
+        .p-btn.withdraw { background: #111; color: #fff; border: 1px solid #222; }
+
+        /* Danh Sách Menu */
+        .menu-container { margin-top: 30px; }
+        .menu-item {
+            background: var(--card); border: 1px solid #111; border-radius: 20px;
+            padding: 18px 20px; display: flex; align-items: center; gap: 15px;
+            margin-bottom: 12px; text-decoration: none; color: #eee;
+            transition: 0.2s;
+        }
+        .menu-item:active { transform: scale(0.98); background: #1a1a1a; }
+        .menu-item .m-icon {
+            width: 40px; height: 40px; border-radius: 12px; background: rgba(255,215,0,0.05);
+            display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 18px;
+        }
+        .menu-item b { flex: 1; font-size: 14px; font-weight: 600; }
+        .menu-item i.fa-chevron-right { font-size: 12px; color: #333; }
+
+        .logout-area {
+            margin-top: 40px; text-align: center;
+        }
+        .btn-logout {
+            background: transparent; border: none; color: #ff4d4d;
+            font-weight: 900; font-family: 'Orbitron'; font-size: 12px;
+            letter-spacing: 1px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+            width: 100%;
+        }
+
+        /* Nav Bottom */
+        nav {
+            position: fixed; bottom: 0; width: 100%; background: #080808;
+            display: flex; justify-content: space-around; padding: 15px 0;
+            border-top: 1px solid #111; z-index: 1000;
+        }
+        nav a { color: #333; text-decoration: none; font-size: 9px; text-align: center; font-weight: 700; }
+        nav a.active { color: var(--gold); }
+        nav i { font-size: 20px; display: block; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+    <section class="profile-header">
+        <div class="avatar-wrapper animate__animated animate__zoomIn">
+            <i class="fas fa-user-astronaut"></i>
+            <div class="vip-badge">VIP 1</div>
+        </div>
+        <div class="user-info animate__animated animate__fadeInUp">
+            <h2 id="disp-phone">09xxxxxxxx</h2>
+            <p>Nhà đầu tư Quantum</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="wallet-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+            <span>TÀI SẢN KHẢ DỤNG</span>
+            <h1 id="disp-balance">0đ</h1>
+            <div class="btn-group">
+                <a href="nap.html" class="p-btn deposit"><i class="fas fa-arrow-down"></i> NẠP TIỀN</a>
+                <a href="rut.html" class="p-btn withdraw"><i class="fas fa-arrow-up"></i> RÚT TIỀN</a>
+            </div>
+        </div>
+
+        <div class="menu-container animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+            <a href="lichsu.html" class="menu-item">
+                <div class="m-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                <b>Lịch sử giao dịch</b>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+
+            <a href="ref.html" class="menu-item">
+                <div class="m-icon"><i class="fas fa-users"></i></div>
+                <b>Đội ngũ & Hoa hồng</b>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+
+            <a href="#" class="menu-item" onclick="alert('Tính năng đang cập nhật!')">
+                <div class="m-icon"><i class="fas fa-shield-alt"></i></div>
+                <b>Trung tâm bảo mật</b>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+
+            <a href="#" class="menu-item" onclick="alert('Kết nối Telegram CSKH...')">
+                <div class="m-icon"><i class="fab fa-telegram-plane"></i></div>
+                <b>Hỗ trợ trực tuyến 24/7</b>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+
+        <div class="logout-area animate__animated animate__fadeIn" style="animation-delay: 0.4s;">
+            <button class="btn-logout" onclick="performLogout()">
+                <i class="fas fa-sign-out-alt"></i> ĐĂNG XUẤT TÀI KHOẢN
+            </button>
+        </div>
+    </div>
+
+    <nav>
+        <a href="index.html"><i class="fas fa-rocket"></i>SÀN ĐẦU TƯ</a>
+        <a href="lichsu.html"><i class="fas fa-history"></i>LỊCH SỬ</a>
+        <a href="profile.html" class="active"><i class="fas fa-user-circle"></i>HỒ SƠ</a>
+    </nav>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        const supabase = createClient('https://fgartftwimourooudcrp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o');
+
+        const phone = localStorage.getItem('user_session');
+
+        async function initProfile() {
+            // Kiểm tra đăng nhập
+            if(!phone) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Hiển thị số điện thoại
+            document.getElementById('disp-phone').innerText = phone;
+
+            // Lấy dữ liệu thực tế từ Supabase
+            const { data, error } = await supabase
+                .from('users')
+                .select('balance')
+                .eq('phone', phone)
+                .single();
+
+            if(data) {
+                document.getElementById('disp-balance').innerText = data.balance.toLocaleString('vi-VN') + "đ";
+            } else {
+                console.error("Lỗi lấy số dư:", error);
+            }
+        }
+
+        window.performLogout = () => {
+            if(confirm("Bạn muốn đăng xuất khỏi hệ thống?")) {
+                localStorage.removeItem('user_session');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Chạy hàm khi trang load
+        initProfile();
+    </script>
+</body>
+</html>
