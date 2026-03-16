@@ -3,157 +3,328 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NHẬT KÝ GIAO DỊCH | QUANTUM</title>
+    <title>QUẢN LÝ GIAO DỊCH QUANTUM | BUTTERLESS V5.0</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <style>
         :root {
             --gold: #FFD700;
-            --bg: #000;
-            --card: rgba(15, 15, 15, 0.98);
-            --border: rgba(255, 215, 0, 0.1);
+            --gold-gradient: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728, #fcf6ba, #aa771c);
+            --bg-dark: #050505;
+            --card-bg: #111111;
+            --green: #00ff88;
+            --red: #ff4d4d;
+            --border-glow: rgba(255, 215, 0, 0.15);
+            --text-gray: #888888;
+            --glass: rgba(255, 255, 255, 0.03);
         }
 
+        /* --- THIẾT LẬP CƠ BẢN --- */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; }
+        ::-webkit-scrollbar { width: 0px; }
+        body { 
+            background: var(--bg-dark); color: #fff; font-family: 'Inter', sans-serif; 
+            overflow-x: hidden; padding-bottom: 120px; line-height: 1.6;
+        }
 
+        /* --- ANIMATIONS VIP --- */
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.1); }
+            50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.3); }
+            100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.1); }
+        }
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 5px rgba(255, 215, 0, 0.2); }
+            50% { text-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
+            100% { text-shadow: 0 0 5px rgba(255, 215, 0, 0.2); }
+        }
+
+        /* --- HEADER --- */
         header {
-            padding: 25px 20px; text-align: center; border-bottom: 1px solid var(--border);
-            background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+            padding: 20px; display: flex; align-items: center; gap: 15px;
+            background: rgba(0,0,0,0.95); border-bottom: 1px solid var(--border-glow);
+            position: sticky; top: 0; z-index: 9999; backdrop-filter: blur(20px);
         }
-        header h2 { font-family: 'Orbitron'; font-size: 15px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; }
+        .back-btn { color: #fff; font-size: 20px; text-decoration: none; transition: 0.3s; }
+        .back-btn:hover { color: var(--gold); transform: translateX(-3px); }
+        header h2 { font-family: 'Orbitron'; font-size: 14px; letter-spacing: 2px; color: var(--gold); font-weight: 800; }
 
-        .container { padding: 20px; }
-
-        /* Vùng hiển thị lịch sử */
-        #history-content {
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
+        /* --- TABS NAVIGATION --- */
+        .tabs-container {
+            position: sticky; top: 65px; z-index: 999; background: #000;
+            display: flex; padding: 10px; gap: 10px; border-bottom: 1px solid #111;
         }
-
-        /* --- TRẠNG THÁI TRỐNG (MẶC ĐỊNH) --- */
-        .empty-box {
-            margin: auto;
-            text-align: center;
-            padding: 50px 20px;
-            animation: fadeIn 1.5s ease;
+        .tab-btn {
+            flex: 1; padding: 12px 5px; border-radius: 15px; border: 1px solid #222;
+            background: var(--glass); color: var(--text-gray); font-family: 'Orbitron';
+            font-size: 9px; font-weight: 900; cursor: pointer; transition: 0.4s;
+            text-align: center; display: flex; flex-direction: column; gap: 5px;
         }
-        .empty-box i {
-            font-size: 60px;
-            background: linear-gradient(135deg, #222, #111);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 10px rgba(255,215,0,0.05));
-        }
-        .empty-box p {
-            font-size: 13px;
-            color: #444;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        .tab-btn i { font-size: 16px; }
+        .tab-btn.active {
+            background: var(--gold-glow); border-color: var(--gold); color: var(--gold);
+            animation: pulseGlow 2s infinite;
         }
 
-        /* --- ITEM KHI CÓ DỮ LIỆU --- */
-        .log-item {
-            background: var(--card);
-            border: 1px solid #111;
-            padding: 20px;
-            border-radius: 22px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 4px solid var(--gold); /* Nhấn nhá vạch vàng cho đẳng cấp */
-        }
-        .log-left h4 { font-size: 14px; margin-bottom: 5px; color: #fff; }
-        .log-left span { font-size: 10px; color: #555; font-weight: 700; }
+        /* --- HISTORY LIST --- */
+        .history-wrapper { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
         
-        .log-right { text-align: right; }
-        .log-right b { font-family: 'Orbitron'; font-size: 15px; display: block; margin-bottom: 5px; }
-        .stt { font-size: 9px; padding: 3px 10px; border-radius: 50px; font-weight: 900; }
-        
-        .stt-pending { background: rgba(255, 215, 0, 0.1); color: var(--gold); }
-        .stt-success { background: rgba(0, 255, 136, 0.1); color: #00ff88; }
-
-        /* Nav Bottom */
-        nav {
-            position: fixed; bottom: 0; width: 100%; background: #080808;
-            display: flex; justify-content: space-around; padding: 15px 0;
-            border-top: 1px solid #111;
+        /* --- THẺ ĐẦU TƯ VIP --- */
+        .invest-card {
+            background: linear-gradient(145deg, #121212 0%, #000 100%);
+            border: 1px solid #222; border-radius: 25px; padding: 20px;
+            position: relative; overflow: hidden; transition: 0.4s;
+            animation: fadeInUp 0.6s ease forwards;
         }
-        nav a { color: #333; text-decoration: none; font-size: 9px; text-align: center; font-weight: 700; }
-        nav a.active { color: var(--gold); }
-        nav i { font-size: 18px; display: block; margin-bottom: 5px; }
+        .invest-card.active-package { border-color: var(--gold); }
+        .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .package-name { font-family: 'Orbitron'; font-size: 14px; color: var(--gold); font-weight: 900; }
+        .package-date { font-size: 10px; color: var(--text-gray); margin-top: 4px; display: block; }
+        
+        .profit-badge { 
+            text-align: right; background: rgba(0,255,136,0.1); padding: 5px 10px; 
+            border-radius: 10px; border: 1px solid rgba(0,255,136,0.2); 
+        }
+        .profit-amount { color: var(--green); font-family: 'Orbitron'; font-weight: 900; font-size: 14px; }
+        
+        .timer-box {
+            background: rgba(255, 215, 0, 0.05); border: 1px dashed rgba(255, 215, 0, 0.2);
+            border-radius: 18px; padding: 15px; margin-top: 15px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .timer-label { font-size: 9px; color: var(--text-gray); font-weight: 800; text-transform: uppercase; }
+        .countdown-timer { font-family: 'Orbitron'; color: var(--gold); font-size: 16px; font-weight: 900; animation: textGlow 2s infinite; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- THẺ NẠP/RÚT --- */
+        .standard-card {
+            background: var(--card-bg); border-radius: 20px; padding: 18px;
+            border: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center;
+            animation: fadeInRight 0.5s ease forwards;
+        }
+        .tx-info h4 { font-size: 13px; font-weight: 700; margin-bottom: 5px; }
+        .tx-info p { font-size: 10px; color: var(--text-gray); }
+        .tx-status { text-align: right; }
+        .tx-amount { font-family: 'Orbitron'; font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+        .badge { font-size: 9px; font-weight: 900; text-transform: uppercase; padding: 4px 10px; border-radius: 8px; }
+
+        /* --- FOOTER NAV --- */
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 90px;
+            background: rgba(0,0,0,0.98); border-top: 1px solid #1a1a1a;
+            display: flex; justify-content: space-around; align-items: center; z-index: 10000;
+        }
+        .nav-link { color: #444; text-decoration: none; text-align: center; transition: 0.3s; }
+        .nav-link.active { color: var(--gold); }
+        .nav-link i { font-size: 22px; margin-bottom: 5px; display: block; }
+        .nav-link span { font-size: 10px; font-weight: 800; font-family: 'Orbitron'; }
+
+        /* --- EMPTY STATE --- */
+        #empty-box { text-align: center; padding: 100px 20px; display: none; }
+        #empty-box i { font-size: 50px; color: #1a1a1a; margin-bottom: 20px; }
+        #empty-box p { color: #444; font-size: 12px; font-family: 'Orbitron'; letter-spacing: 1px; }
+
+        .c-green { color: var(--green); }
+        .c-red { color: var(--red); }
+        .c-gold { color: var(--gold); }
     </style>
 </head>
 <body>
 
     <header>
-        <h2>Dữ liệu giao dịch</h2>
+        <a href="index.html" class="back-btn"><i class="fas fa-chevron-left"></i></a>
+        <h2>LỊCH SỬ GIAO DỊCH VIP</h2>
     </header>
 
-    <div class="container">
-        <div id="history-content">
-            <div class="empty-box">
-                <i class="fas fa-folder-open"></i>
-                <p>Chưa có lịch sử giao dịch</p>
-            </div>
+    <div class="tabs-container">
+        <div class="tab-btn active" onclick="changeTab('invest', this)">
+            <i class="fas fa-chart-line"></i>
+            <span>ĐẦU TƯ</span>
+        </div>
+        <div class="tab-btn" onclick="changeTab('deposit', this)">
+            <i class="fas fa-wallet"></i>
+            <span>NẠP TIỀN</span>
+        </div>
+        <div class="tab-btn" onclick="changeTab('withdraw', this)">
+            <i class="fas fa-hand-holding-usd"></i>
+            <span>RÚT TIỀN</span>
         </div>
     </div>
 
-    <nav>
-        <a href="index.html"><i class="fas fa-th-large"></i>SÀN GIAO DỊCH</a>
-        <a href="lichsu.html" class="active"><i class="fas fa-chart-line"></i>LỊCH SỬ</a>
-        <a href="profile.html"><i class="fas fa-user-shield"></i>TÀI KHOẢN</a>
+    <div id="empty-box">
+        <i class="fas fa-folder-open"></i>
+        <p>CHƯA CÓ DỮ LIỆU GIAO DỊCH</p>
+    </div>
+
+    <div class="history-wrapper" id="history-content">
+        </div>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="nav-link"><i class="fas fa-home-alt"></i><span>Trang Chủ</span></a>
+        <a href="lichsu.html" class="nav-link active"><i class="fas fa-history"></i><span>Lịch Sử</span></a>
+        <a href="ref.html" class="nav-link"><i class="fas fa-users-crown"></i><span>Đội Ngũ</span></a>
+        <a href="profile.html" class="nav-link"><i class="fas fa-user-circle"></i><span>Cá Nhân</span></a>
     </nav>
 
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        
+        // --- KẾT NỐI SUPABASE ---
         const supabase = createClient('https://fgartftwimourooudcrp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o');
 
         const phone = localStorage.getItem('user_session');
+        let currentTab = 'invest';
+        let userBalance = 0;
+        let activeTimers = [];
 
-        async function fetchLogs() {
-            if(!phone) return;
+        // --- CHUYỂN TAB ---
+        window.changeTab = (tab, btn) => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentTab = tab;
+            fetchHistory();
+        };
 
-            const { data, error } = await supabase
-                .from('history')
-                .select('*')
-                .eq('phone', phone)
-                .order('created_at', { ascending: false });
+        // --- LẤY DỮ LIỆU ---
+        async function fetchHistory() {
+            // Dọn dẹp timers cũ
+            activeTimers.forEach(clearInterval);
+            activeTimers = [];
 
-            const container = document.getElementById('history-content');
+            const content = document.getElementById('history-content');
+            const empty = document.getElementById('empty-box');
+            content.innerHTML = '<p style="text-align:center; color:var(--gold); font-size:11px; margin-top:30px; font-family:Orbitron;">SYNCHRONIZING...</p>';
+            empty.style.display = 'none';
 
-            if(data && data.length > 0) {
-                // Nếu có dữ liệu, xóa sạch cái "Trống" đi và render list
-                container.innerHTML = data.map(item => `
-                    <div class="log-item animate__animated animate__fadeInUp">
-                        <div class="log-left">
-                            <h4>${item.type}</h4>
-                            <span>${new Date(item.created_at).toLocaleString('vi-VN')}</span>
-                        </div>
-                        <div class="log-right">
-                            <b style="color: ${item.type === 'Nạp tiền' ? '#00ff88' : '#ff4d4d'}">
-                                ${item.type === 'Nạp tiền' ? '+' : '-'}${item.amount.toLocaleString()}đ
-                            </b>
-                            <span class="stt ${item.status === 'Thành công' ? 'stt-success' : 'stt-pending'}">
-                                ${item.status}
-                            </span>
-                        </div>
-                    </div>
-                `).join('');
+            // 1. Lấy thông tin User để cộng lãi
+            const { data: user } = await supabase.from('users').select('*').eq('phone', phone).single();
+            if(user) userBalance = user.balance;
+
+            // 2. Lấy History
+            const { data: logs, error } = await supabase.from('history').select('*').eq('phone', phone).order('created_at', { ascending: false });
+
+            if(error || !logs || logs.length === 0) {
+                content.innerHTML = '';
+                empty.style.display = 'block';
+                return;
             }
-            // Nếu không có dữ liệu (data trống), thì cái div .empty-box vẫn giữ nguyên.
+
+            // 3. Phân loại theo Tab
+            let filtered = [];
+            if(currentTab === 'invest') filtered = logs.filter(i => i.type.includes('Đầu tư'));
+            else if(currentTab === 'deposit') filtered = logs.filter(i => i.type.includes('Nạp'));
+            else if(currentTab === 'withdraw') filtered = logs.filter(i => i.type.includes('Rút'));
+
+            if(filtered.length === 0) {
+                content.innerHTML = '';
+                empty.style.display = 'block';
+                return;
+            }
+
+            // 4. Render Giao diện
+            content.innerHTML = '';
+            filtered.forEach((item, index) => {
+                const date = new Date(item.created_at).toLocaleString('vi-VN');
+                
+                if(currentTab === 'invest') {
+                    const lai = item.amount * 0.32;
+                    const isDone = item.status === 'Đã nhận lãi';
+                    const card = document.createElement('div');
+                    card.className = `invest-card ${!isDone ? 'active-package' : ''}`;
+                    card.style.animationDelay = `${index * 0.1}s`;
+                    
+                    card.innerHTML = `
+                        <div class="card-top">
+                            <div>
+                                <span class="package-name"><i class="fas fa-cube"></i> ${item.type}</span>
+                                <span class="package-date">Bắt đầu: ${date}</span>
+                            </div>
+                            <div class="profit-badge">
+                                <span style="display:block; font-size:8px; color:#555;">LỢI NHUẬN 32%</span>
+                                <span class="profit-amount">+${lai.toLocaleString()}đ</span>
+                            </div>
+                        </div>
+                        <div style="font-size:11px; color:#555; display:flex; justify-content:space-between;">
+                            <span>Vốn gốc: ${item.amount.toLocaleString()}đ</span>
+                            <span class="c-green" style="font-weight:800;">● ${isDone ? 'HOÀN TẤT' : 'ĐANG CHẠY'}</span>
+                        </div>
+                        <div class="timer-box">
+                            <span class="timer-label">${isDone ? 'Trạng thái' : 'Trả lãi tự động sau'}</span>
+                            <span class="countdown-timer" id="timer-${index}">${isDone ? 'ĐÃ CỘNG TIỀN' : '00:00:00'}</span>
+                        </div>
+                    `;
+                    content.appendChild(card);
+                    if(!isDone) initCountdown(`timer-${index}`, item.created_at, item.id, lai);
+                } else {
+                    const isOut = currentTab === 'withdraw';
+                    const card = document.createElement('div');
+                    card.className = 'standard-card';
+                    card.style.animationDelay = `${index * 0.05}s`;
+                    card.innerHTML = `
+                        <div class="tx-info">
+                            <h4>${item.type}</h4>
+                            <p>${date}</p>
+                        </div>
+                        <div class="tx-status">
+                            <p class="tx-amount ${isOut ? 'c-red' : 'c-green'}">${isOut ? '-' : '+'}${item.amount.toLocaleString()}đ</p>
+                            <span class="badge" style="background:rgba(255,215,0,0.1); color:var(--gold)">${item.status}</span>
+                        </div>
+                    `;
+                    content.appendChild(card);
+                }
+            });
         }
 
-        fetchLogs();
+        // --- LOGIC ĐẾM NGƯỢC & AUTO CỘNG LÃI ---
+        function initCountdown(elId, startTime, historyId, amountLai) {
+            const endTime = new Date(startTime).getTime() + (24 * 60 * 60 * 1000); // +24h
+            
+            const clock = setInterval(async () => {
+                const now = new Date().getTime();
+                const diff = endTime - now;
+                const display = document.getElementById(elId);
+
+                if(!display) { clearInterval(clock); return; }
+
+                if(diff <= 0) {
+                    clearInterval(clock);
+                    display.innerHTML = "PROCESSING...";
+                    await processAutoProfit(historyId, amountLai);
+                    return;
+                }
+
+                const h = Math.floor(diff / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+                display.innerHTML = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+            }, 1000);
+            activeTimers.push(clock);
+        }
+
+        async function processAutoProfit(hid, money) {
+            try {
+                // 1. Cộng tiền vào số dư User
+                const { error: userErr } = await supabase.from('users').update({ balance: userBalance + money }).eq('phone', phone);
+                if(userErr) throw userErr;
+
+                // 2. Đánh dấu History là đã nhận lãi
+                const { error: histErr } = await supabase.from('history').update({ status: 'Đã nhận lãi' }).eq('id', hid);
+                if(histErr) throw histErr;
+
+                // 3. Làm mới danh sách
+                fetchHistory();
+            } catch (e) {
+                console.error("Lỗi cộng lãi:", e);
+            }
+        }
+
+        // --- KHỞI CHẠY ---
+        window.onload = () => {
+            if(!phone) { window.location.href = 'login.html'; return; }
+            fetchHistory();
+        };
     </script>
 </body>
 </html>
