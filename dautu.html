@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quantum Secure - Đầu Tư</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: linear-gradient(135deg, #f6d365 0%, #fda085 100%); --green: #00ff88; --red: #ff4d4d; --bg: #000000; --card: #121212; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; padding-bottom: 80px; }
+
+        /* Header ID */
+        .header-profile { padding: 20px; display: flex; align-items: center; justify-content: space-between; }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .avatar-crown { width: 45px; height: 45px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .id-text b { display: block; font-size: 16px; color: #fff; }
+        .id-text span { font-size: 10px; color: var(--green); letter-spacing: 1px; }
+
+        /* Wallet Card */
+        .wallet-card { margin: 0 15px; background: var(--card); border-radius: 25px; padding: 25px; border: 1px solid #222; position: relative; overflow: hidden; }
+        .wallet-card::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,215,0,0.05) 0%, transparent 70%); }
+        .wallet-label { color: #888; font-size: 12px; margin-bottom: 10px; display: block; }
+        .balance-value { font-family: 'Orbitron'; font-size: 28px; font-weight: 800; letter-spacing: -1px; margin-bottom: 15px; }
+        .wallet-actions { display: flex; gap: 12px; }
+        .btn-wallet { flex: 1; padding: 12px; border-radius: 15px; border: none; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+        .btn-nap { background: var(--gold); color: #000; }
+        .btn-rut { background: #222; color: #fff; }
+
+        /* Chart Section */
+        .chart-section { margin: 20px 15px; background: var(--card); border-radius: 20px; padding: 15px; border: 1px solid #222; }
+        .chart-info { display: flex; justify-content: space-between; margin-bottom: 15px; }
+        .symbol { font-size: 14px; font-weight: 600; color: #aaa; }
+        .change-percent.up { color: var(--green); }
+        .change-percent.down { color: var(--red); }
+        #tradingChart { width: 100%; height: 180px; }
+
+        /* Trading Buttons */
+        .trade-controls { padding: 0 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn-trade { padding: 18px; border-radius: 15px; border: none; font-weight: 800; font-size: 16px; color: #000; cursor: pointer; transition: 0.2s; }
+        .btn-buy { background: var(--green); box-shadow: 0 0 20px rgba(0,255,136,0.2); }
+        .btn-sell { background: var(--red); color: #fff; box-shadow: 0 0 20px rgba(255,77,77,0.2); }
+        .btn-trade:active { transform: scale(0.95); }
+
+        /* Bottom Nav (Giống ảnh) */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #0a0a0a; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #222; }
+        .nav-item { text-align: center; color: #555; text-decoration: none; font-size: 10px; }
+        .nav-item.active { color: #f6d365; }
+        .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
+
+        /* Toast */
+        #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 25px; border-radius: 50px; font-weight: bold; font-size: 13px; display: none; z-index: 1000; }
+    </style>
+</head>
+<body>
+
+    <div class="header-profile">
+        <div class="user-info">
+            <div class="avatar-crown">👑</div>
+            <div class="id-text">
+                <b>ID: 0983555789</b>
+                <span>QUANTUM SECURE •</span>
+            </div>
+        </div>
+        <div style="opacity: 0.3;">⏻</div>
+    </div>
+
+    <div class="wallet-card">
+        <span class="wallet-label">SỐ DƯ KHẢ DỤNG (VND)</span>
+        <div class="balance-value" id="user-balance">99,949,989.60</div>
+        <div style="font-size: 11px; color: #555; margin-bottom: 15px;">
+            🌎 Lợi nhuận: +0% &nbsp; 🛡️ Đã bảo mật
+        </div>
+        <div class="wallet-actions">
+            <button class="btn-wallet btn-nap">✚ NẠP TIỀN</button>
+            <button class="btn-wallet btn-rut">⊞ RÚT TIỀN</button>
+        </div>
+    </div>
+
+    <div class="chart-section">
+        <div class="chart-info">
+            <span class="symbol">BITCOIN / VNDT</span>
+            <span class="change-percent up" id="live-percent">+2.41%</span>
+        </div>
+        <canvas id="tradingChart"></canvas>
+    </div>
+
+    <div class="trade-controls">
+        <button class="btn-trade btn-buy" onclick="handleTrade('BUY')">MUA (LONG)</button>
+        <button class="btn-trade btn-sell" onclick="handleTrade('SELL')">BÁN (SHORT)</button>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active"><i>🏠</i>Trang Chủ</a>
+        <a href="#" class="nav-item"><i>🕒</i>Lịch Sử</a>
+        <a href="#" class="nav-item"><i>👥</i>Đội Ngũ</a>
+        <a href="#" class="nav-item"><i>👤</i>Cá Nhân</a>
+    </nav>
+
+    <div id="toast"></div>
+
+    <script>
+        const canvas = document.getElementById('tradingChart');
+        const ctx = canvas.getContext('2d');
+        let candles = [];
+        let balance = 99949989.60;
+        let isTrading = false;
+        let tradeType = null;
+        let basePrice = 65000;
+
+        // --- THUẬT TOÁN ĐIỀU HƯỚNG 70% THUA ---
+        function generateCandle() {
+            const open = candles.length > 0 ? candles[candles.length - 1].close : basePrice;
+            let close;
+
+            if (isTrading) {
+                // Tỉ lệ 70% nến đi ngược hướng người dùng chọn
+                const rigged = Math.random() < 0.70; 
+                const volatility = Math.random() * 200;
+
+                if (tradeType === 'BUY') {
+                    close = rigged ? open - volatility : open + volatility;
+                } else {
+                    close = rigged ? open + volatility : open - volatility;
+                }
+            } else {
+                close = open + (Math.random() - 0.5) * 150;
+            }
+
+            const high = Math.max(open, close) + Math.random() * 30;
+            const low = Math.min(open, close) - Math.random() * 30;
+
+            candles.push({ open, close, high, low });
+            if (candles.length > 40) candles.shift();
+            
+            // Cập nhật giao diện
+            const diff = ((close - candles[0].open) / candles[0].open * 100).toFixed(2);
+            const pEl = document.getElementById('live-percent');
+            pEl.innerText = (diff > 0 ? "+" : "") + diff + "%";
+            pEl.className = "change-percent " + (diff > 0 ? "up" : "down");
+        }
+
+        function handleTrade(type) {
+            if (isTrading) return;
+            isTrading = true;
+            tradeType = type;
+            
+            const betAmount = 5000000; // Mặc định cược 5 triệu
+            balance -= betAmount;
+            updateBalance();
+            
+            showToast("Đang khớp lệnh " + type + "...", "#f6d365", "#000");
+
+            // Sau 10 giây chốt kết quả
+            setTimeout(() => {
+                const finalCandle = candles[candles.length-1];
+                const prevCandle = candles[candles.length-2];
+                const win = (type === 'BUY' && finalCandle.close > prevCandle.close) || 
+                            (type === 'SELL' && finalCandle.close < prevCandle.close);
+
+                if (win) {
+                    const winAmt = betAmount * 1.95;
+                    balance += winAmt;
+                    showToast("CHIẾN THẮNG: +" + winAmt.toLocaleString() + "đ", "#00ff88", "#000");
+                } else {
+                    showToast("LỆNH THUA: -" + betAmount.toLocaleString() + "đ", "#ff4d4d", "#fff");
+                }
+                isTrading = false;
+                updateBalance();
+            }, 10000);
+        }
+
+        function updateBalance() {
+            document.getElementById('user-balance').innerText = balance.toLocaleString(undefined, {minimumFractionDigits: 2});
+        }
+
+        function showToast(msg, bg, color) {
+            const t = document.getElementById('toast');
+            t.innerText = msg; t.style.background = bg; t.style.color = color;
+            t.style.display = "block";
+            setTimeout(() => t.style.display = "none", 3000);
+        }
+
+        function draw() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            const w = canvas.width / 45;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const min = Math.min(...candles.map(c => c.low)) - 50;
+            const max = Math.max(...candles.map(c => c.high)) + 50;
+
+            candles.forEach((c, i) => {
+                const x = i * (w + 4);
+                const isUp = c.close >= c.open;
+                const yOpen = canvas.height - ((c.open - min) / (max - min)) * canvas.height;
+                const yClose = canvas.height - ((c.close - min) / (max - min)) * canvas.height;
+                const yHigh = canvas.height - ((c.high - min) / (max - min)) * canvas.height;
+                const yLow = canvas.height - ((c.low - min) / (max - min)) * canvas.height;
+
+                ctx.strokeStyle = isUp ? "#00ff88" : "#ff4d4d";
+                ctx.beginPath(); ctx.moveTo(x + w/2, yHigh); ctx.lineTo(x + w/2, yLow); ctx.stroke();
+                
+                ctx.fillStyle = isUp ? "#00ff88" : "#ff4d4d";
+                ctx.fillRect(x, Math.min(yOpen, yClose), w, Math.max(2, Math.abs(yOpen - yClose)));
+            });
+            requestAnimationFrame(draw);
+        }
+
+        for(let i=0; i<40; i++) generateCandle();
+        setInterval(generateCandle, 2000);
+        draw();
+    </script>
+</body>
+</html>
