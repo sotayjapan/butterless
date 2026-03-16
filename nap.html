@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NẠP VỐN QUANTUM | BUTTERLESS</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --gold: #FFD700;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fcf6ba 55%, #aa771c 100%);
+            --bg: #050505;
+            --card: rgba(20, 20, 20, 0.9);
+            --border: rgba(255, 215, 0, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; 
+            min-height: 100vh; overflow-x: hidden;
+        }
+
+        /* --- BACKGROUND ANIMATION --- */
+        .bg-glow {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1a1a00 0%, #050505 100%);
+            z-index: -1;
+        }
+
+        /* --- HEADER --- */
+        header {
+            padding: 20px; display: flex; align-items: center; gap: 15px;
+            background: rgba(0,0,0,0.8); border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100;
+        }
+        header a { color: var(--gold); font-size: 20px; transition: 0.3s; }
+        header h2 { font-family: 'Orbitron'; font-size: 16px; letter-spacing: 2px; text-shadow: 0 0 10px var(--gold); }
+
+        .container { padding: 25px 20px; position: relative; z-index: 1; }
+
+        /* --- CARD VIP --- */
+        .deposit-card {
+            background: var(--card); border-radius: 35px; border: 1.5px solid var(--border);
+            padding: 30px 20px; backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(255,215,0,0.05);
+            position: relative; overflow: hidden;
+        }
+
+        .deposit-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent, transparent, transparent, var(--gold));
+            animation: rotate 6s linear infinite; opacity: 0.1; pointer-events: none;
+        }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+
+        .label { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 20px; display: block; letter-spacing: 2px; text-align: center; font-weight: 800; }
+
+        /* --- INPUT BOX --- */
+        .amount-box {
+            background: rgba(0,0,0,0.6); border: 1px solid #333; padding: 20px;
+            border-radius: 25px; margin-bottom: 25px; transition: 0.4s;
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.5);
+        }
+        .amount-box:focus-within { border-color: var(--gold); box-shadow: 0 0 20px rgba(255,215,0,0.2); }
+        .amount-box input {
+            width: 100%; background: transparent; border: none; color: var(--gold);
+            font-size: 30px; font-weight: 900; font-family: 'Orbitron'; text-align: center; outline: none;
+        }
+
+        /* --- 7 NÚT GÓI --- */
+        .package-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
+        .p-btn {
+            background: #151515; border: 1px solid #252525; padding: 18px 10px;
+            border-radius: 20px; color: #fff; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .p-btn b { font-size: 14px; font-family: 'Orbitron'; color: var(--gold); margin-bottom: 4px; }
+        .p-btn span { font-size: 9px; color: #666; font-weight: 700; text-transform: uppercase; }
+        
+        .p-btn.active {
+            background: var(--gold-gradient); border-color: transparent;
+            transform: translateY(-5px) scale(1.05); box-shadow: 0 10px 20px rgba(255,215,0,0.3);
+        }
+        .p-btn.active b, .p-btn.active span { color: #000; }
+
+        /* --- INFO AREA --- */
+        .info-row {
+            display: flex; justify-content: space-between; padding: 15px 5px;
+            border-bottom: 1px solid rgba(255,215,0,0.1); font-size: 13px;
+        }
+        .info-row span { color: #888; }
+        .info-row b { color: #fff; font-family: 'Inter'; }
+        .info-row b.gold-text { color: var(--gold); font-family: 'Orbitron'; }
+
+        /* --- BUTTONS --- */
+        .btn-main {
+            width: 100%; padding: 22px; border-radius: 25px; border: none;
+            background: var(--gold-gradient); color: #000; font-weight: 900;
+            font-family: 'Orbitron'; cursor: pointer; margin-top: 15px;
+            font-size: 15px; letter-spacing: 1px; transition: 0.3s;
+            box-shadow: 0 15px 30px rgba(255,215,0,0.2);
+        }
+        .btn-main:active { transform: scale(0.95); box-shadow: none; }
+
+        .qr-area {
+            background: #fff; padding: 10px; border-radius: 25px;
+            width: 240px; height: 240px; margin: 0 auto 25px;
+            box-shadow: 0 0 40px rgba(255,215,0,0.2);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { box-shadow: 0 0 10px rgba(255,215,0,0.2); } 50% { box-shadow: 0 0 40px rgba(255,215,0,0.4); } 100% { box-shadow: 0 0 10px rgba(255,215,0,0.2); } }
+        .qr-area img { width: 100%; height: 100%; object-fit: contain; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <header>
+        <a href="index.html"><i class="fas fa-chevron-left"></i></a>
+        <h2>NẠP VỐN QUANTUM</h2>
+    </header>
+
+    <div class="container">
+        <div id="step-1" class="deposit-card animate__animated animate__zoomIn">
+            <span class="label">Mời chọn gói đầu tư VIP</span>
+            <div class="amount-box">
+                <input type="number" id="inp-amt" value="90000">
+            </div>
+
+            <div class="package-grid">
+                <button class="p-btn active" onclick="setPkg(90000)"><b>90.000</b><span>Gói Đồng</span></button>
+                <button class="p-btn" onclick="setPkg(350000)"><b>350.000</b><span>Gói Bạc</span></button>
+                <button class="p-btn" onclick="setPkg(1000000)"><b>1.000.000</b><span>Gói Vàng</span></button>
+                <button class="p-btn" onclick="setPkg(3000000)"><b>3.000.000</b><span>Gói Bạch Kim</span></button>
+                <button class="p-btn" onclick="setPkg(10000000)"><b>10.000.000</b><span>Gói Kim Cương</span></button>
+                <button class="p-btn" onclick="setPkg(30000000)"><b>30.000.000</b><span>Gói Quantum</span></button>
+                <button class="p-btn" style="grid-column: span 2;" onclick="setPkg(50000000)"><b>50.000.000</b><span>Gói Vô Cực</span></button>
+            </div>
+
+            <button class="btn-main" onclick="goNext()">TIẾP TỤC <i class="fas fa-arrow-right"></i></button>
+        </div>
+
+        <div id="payment-area" style="display: none;" class="deposit-card animate__animated animate__fadeInUp">
+            <div class="qr-area">
+                <img src="qr-image.png" alt="QR BIDV">
+            </div>
+
+            <div class="info-row"><span>Ngân hàng</span><b>BIDV</b></div>
+            <div class="info-row"><span>Số tài khoản</span><b style="letter-spacing:1px">8883214078</b></div>
+            <div class="info-row"><span>Chủ tài khoản</span><b>NGUYEN VAN NAM</b></div>
+            <div class="info-row"><span>Số tiền</span><b class="gold-text" id="final-amt">0đ</b></div>
+            <div class="info-row"><span>Nội dung</span><b class="gold-text" id="final-memo">---</b></div>
+
+            <button class="btn-main" onclick="confirmPayment()">XÁC NHẬN ĐÃ CHUYỂN <i class="fas fa-check-circle"></i></button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        const supabase = createClient('https://fgartftwimourooudcrp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o');
+
+        const phone = localStorage.getItem('user_session');
+
+        window.setPkg = (amt) => {
+            document.getElementById('inp-amt').value = amt;
+            document.querySelectorAll('.p-btn').forEach(b => b.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        };
+
+        window.goNext = () => {
+            const val = document.getElementById('inp-amt').value;
+            if(val < 90000) return alert("Min nạp là 90,000đ!");
+            
+            document.getElementById('final-amt').innerText = Number(val).toLocaleString() + "đ";
+            document.getElementById('final-memo').innerText = "NAP " + phone;
+            document.getElementById('step-1').style.display = 'none';
+            document.getElementById('payment-area').style.display = 'block';
+        };
+
+        window.confirmPayment = async () => {
+            const val = document.getElementById('inp-amt').value;
+            const { error } = await supabase.from('history').insert([{
+                phone: phone,
+                type: 'Nạp tiền',
+                amount: parseInt(val),
+                status: 'Chờ duyệt'
+            }]);
+
+            if(!error) {
+                alert("✨ Giao dịch đang được xử lý! Vui lòng chờ 3-5 phút.");
+                window.location.href = 'index.html';
+            }
+        };
+    </script>
+</body>
+</html>
