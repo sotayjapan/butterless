@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quantum Secure - Đầu Tư VIP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root { 
+            --gold: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            --green: #00ff88; --red: #ff4d4d; --bg: #000; --card: #121212;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; overflow-x: hidden; padding-bottom: 90px; }
+
+        /* Header VIP */
+        .header { padding: 20px; display: flex; align-items: center; justify-content: space-between; }
+        .user-box { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 45px; height: 45px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 0 15px rgba(255,215,0,0.3); }
+        .id-info b { display: block; font-size: 15px; font-family: 'Orbitron'; }
+        .id-info span { font-size: 10px; color: var(--green); font-weight: bold; }
+
+        /* Wallet Card */
+        .wallet { margin: 0 15px; background: var(--card); border-radius: 25px; padding: 25px; border: 1px solid #222; position: relative; overflow: hidden; }
+        .balance-num { font-family: 'Orbitron'; font-size: 30px; font-weight: 900; background: var(--gold); -webkit-background-clip: text; color: transparent; margin: 10px 0; }
+        .wallet-btns { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-w { flex: 1; padding: 12px; border-radius: 12px; border: none; font-weight: 800; text-decoration: none; text-align: center; font-size: 13px; }
+        .n-btn { background: var(--gold); color: #000; }
+        .r-btn { background: #222; color: #fff; border: 1px solid #333; }
+
+        /* Chart Area */
+        .chart-box { margin: 20px 15px; background: var(--card); border-radius: 20px; padding: 15px; border: 1px solid #222; position: relative; }
+        #tradingChart { width: 100%; height: 200px; }
+        #entry-line { position: absolute; left: 0; width: 100%; border-top: 2px dashed #fff; display: none; z-index: 5; }
+        .p-tag { position: absolute; right: 10px; top: -20px; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 900; color: #000; }
+
+        /* Trade Panel */
+        .trade-panel { padding: 0 15px; }
+        .in-group { background: #080808; padding: 12px; border-radius: 12px; border: 1px solid #333; margin-bottom: 15px; }
+        .in-group span { font-size: 10px; color: #666; display: block; margin-bottom: 5px; }
+        .in-group input { background: transparent; border: none; color: #fff; font-family: 'Orbitron'; font-size: 20px; width: 100%; outline: none; }
+        .btns-action { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .b-act { padding: 18px; border-radius: 15px; border: none; font-weight: 900; font-size: 16px; cursor: pointer; transition: 0.2s; }
+        .buy { background: var(--green); color: #000; box-shadow: 0 5px 15px rgba(0,255,136,0.2); }
+        .sell { background: var(--red); color: #fff; box-shadow: 0 5px 15px rgba(255,77,77,0.2); }
+
+        /* Nav */
+        .nav { position: fixed; bottom: 0; width: 100%; background: #0a0a0a; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #222; }
+        .n-item { text-align: center; color: #555; text-decoration: none; font-size: 11px; }
+        .n-item.active { color: #f6d365; }
+        .n-item i { display: block; font-size: 20px; margin-bottom: 4px; }
+
+        /* Animation */
+        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .win-anim { animation: bounce 0.5s ease-in-out; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="user-box">
+            <div class="avatar">👑</div>
+            <div class="id-info">
+                <b id="u-phone">Đang tải...</b>
+                <span>QUANTUM SECURE •</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="wallet">
+        <span style="font-size: 12px; color: #888;">SỐ DƯ KHẢ DỤNG (VND)</span>
+        <div class="balance-num" id="u-balance">0.00</div>
+        <div class="wallet-btns">
+            <a href="nap.html" class="btn-w n-btn">✚ NẠP TIỀN</a>
+            <a href="rut.html" class="btn-w r-btn">⊞ RÚT TIỀN</a>
+        </div>
+    </div>
+
+    <div class="chart-box">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <span style="font-family: 'Orbitron'; font-size: 12px; color: #aaa;">BTC / VNDT</span>
+            <span id="price-change" style="color: var(--green); font-weight: bold;">+0.00%</span>
+        </div>
+        <div style="position: relative;">
+            <div id="entry-line"><div class="p-tag" id="entry-tag"></div></div>
+            <canvas id="tradingChart"></canvas>
+        </div>
+    </div>
+
+    <div class="trade-panel">
+        <div class="in-group">
+            <span>SỐ TIỀN ĐẶT CƯỢC</span>
+            <input type="number" id="bet-amt" value="100000">
+        </div>
+        <div class="btns-action">
+            <button class="b-act buy" onclick="placeTrade('BUY')">MUA (LONG)</button>
+            <button class="b-act sell" onclick="placeTrade('SELL')">BÁN (SHORT)</button>
+        </div>
+    </div>
+
+    <nav class="nav">
+        <a href="index.html" class="n-item active"><i>🏠</i>Trang Chủ</a>
+        <a href="lichsu.html" class="n-item"><i>🕒</i>Lịch Sử</a>
+        <a href="index.html" class="n-item"><i>👥</i>Đội Ngũ</a>
+        <a href="profile.html" class="n-item"><i>👤</i>Cá Nhân</a>
+    </nav>
+
+    <script>
+        // KẾT NỐI SUPABASE
+        const S_URL = 'https://fgartftwimourooudcrp.supabase.co';
+        const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o';
+        const supabase = collections = supabase.createClient(S_URL, S_KEY);
+
+        let userPhone = localStorage.getItem('userPhone') || '0983555789'; 
+        let currentBalance = 0;
+        let isBetting = false;
+
+        // Lấy thông tin từ bảng users
+        async function initUser() {
+            const { data, error } = await supabase.from('users').select('*').eq('phone', userPhone).single();
+            if (data) {
+                currentBalance = data.balance;
+                document.getElementById('u-phone').innerText = "ID: " + data.phone;
+                updateUI();
+            }
+        }
+
+        // Cập nhật Database
+        async function syncData(win, amt, type, price) {
+            // Cập nhật tiền
+            await supabase.from('users').update({ balance: currentBalance }).eq('phone', userPhone);
+            // Lưu lịch sử vào bảng history (giống trong ảnh bạn chụp)
+            await supabase.from('history').insert([{
+                phone: userPhone,
+                type: type,
+                amount: amt,
+                status: win ? 'WIN' : 'LOSE',
+                price: price
+            }]);
+        }
+
+        function updateUI() {
+            document.getElementById('u-balance').innerText = currentBalance.toLocaleString(undefined, {minimumFractionDigits: 2});
+        }
+
+        // LOGIC BIỂU ĐỒ & NÉ 70%
+        const canvas = document.getElementById('tradingChart');
+        const ctx = canvas.getContext('2d');
+        let candles = [];
+        let entryPrice = 0;
+        let tradeType = '';
+
+        function getCandle() {
+            const lastClose = candles.length > 0 ? candles[candles.length-1].close : 65000;
+            let close;
+            if (isBetting) {
+                const rigged = Math.random() < 0.70; // Né 70%
+                const move = Math.random() * 100;
+                close = tradeType === 'BUY' ? (rigged ? lastClose - move : lastClose + move) : (rigged ? lastClose + move : lastClose - move);
+            } else {
+                close = lastClose + (Math.random() - 0.5) * 80;
+            }
+            candles.push({ open: lastClose, close, high: Math.max(lastClose, close) + 10, low: Math.min(lastClose, close) - 10 });
+            if (candles.length > 40) candles.shift();
+            draw();
+        }
+
+        function draw() {
+            canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+            const w = canvas.width / 45;
+            const min = Math.min(...candles.map(c => c.low)) - 20;
+            const max = Math.max(...candles.map(c => c.high)) + 20;
+            
+            candles.forEach((c, i) => {
+                const x = i * (w + 4);
+                const isUp = c.close >= c.open;
+                const yOpen = canvas.height - ((c.open - min) / (max - min)) * canvas.height;
+                const yClose = canvas.height - ((c.close - min) / (max - min)) * canvas.height;
+                ctx.fillStyle = isUp ? "#00ff88" : "#ff4d4d";
+                ctx.fillRect(x, Math.min(yOpen, yClose), w, Math.max(2, Math.abs(yOpen - yClose)));
+                
+                if (isBetting && i === candles.length - 1) updateEntryLine(min, max);
+            });
+        }
+
+        function updateEntryLine(min, max) {
+            const line = document.getElementById('entry-line');
+            const y = canvas.height - ((entryPrice - min) / (max - min)) * canvas.height;
+            line.style.display = 'block';
+            line.style.top = (y + canvas.offsetTop) + "px";
+        }
+
+        async function placeTrade(type) {
+            if (isBetting) return;
+            const amt = parseInt(document.getElementById('bet-amt').value);
+            if (amt > currentBalance) return alert("Số dư không đủ!");
+
+            isBetting = true; tradeType = type;
+            entryPrice = candles[candles.length-1].close;
+            currentBalance -= amt; updateUI();
+            
+            document.getElementById('entry-tag').innerText = (type === 'BUY' ? 'LONG ' : 'SHORT ') + amt.toLocaleString() + 'đ';
+            document.getElementById('entry-tag').style.background = type === 'BUY' ? '#00ff88' : '#ff4d4d';
+
+            setTimeout(async () => {
+                const finalPrice = candles[candles.length-1].close;
+                const win = (type === 'BUY' && finalPrice > entryPrice) || (type === 'SELL' && finalPrice < entryPrice);
+                
+                if (win) {
+                    currentBalance += amt * 1.95;
+                    document.querySelector('.wallet').classList.add('win-anim');
+                    setTimeout(() => document.querySelector('.wallet').classList.remove('win-anim'), 500);
+                }
+                
+                await syncData(win, amt, type, entryPrice);
+                isBetting = false;
+                document.getElementById('entry-line').style.display = 'none';
+                updateUI();
+                alert(win ? "BẠN ĐÃ THẮNG!" : "BẠN ĐÃ THUA!");
+            }, 10000);
+        }
+
+        for(let i=0; i<40; i++) getCandle();
+        setInterval(getCandle, 2000);
+        initUser();
+    </script>
+</body>
+</html>
