@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BUTTERLESS | QUANTUM SYSTEM</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --gold: #FFD700;
+            --gold-dark: #b8860b;
+            --bg: #000;
+            --card: #121212;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 215, 0, 0.15);
+            --green: #00ff88;
+            --red: #ff4d4d;
+        }
+
+        /* --- CSS Reset & Base --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        body { 
+            background: var(--bg); color: #fff; 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden; padding-bottom: 110px;
+        }
+
+        /* --- Animtions --- */
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shine { to { background-position: 200% center; } }
+        @keyframes pulse-ring { 0% { transform: scale(0.33); opacity: 1; } 80%, 100% { opacity: 0; } }
+
+        /* --- Layout --- */
+        .container { padding: 0 15px; }
+
+        /* Header VIP */
+        header {
+            padding: 20px; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+        .user-profile { display: flex; align-items: center; gap: 12px; }
+        .avatar-circle {
+            width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--gold);
+            display: flex; align-items: center; justify-content: center; background: #1a1a1a;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+
+        /* Wallet Section */
+        .dashboard-hero {
+            margin: 20px 0; background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
+            border-radius: 35px; border: 1px solid var(--border); padding: 35px 25px;
+            position: relative; overflow: hidden;
+        }
+        .dashboard-hero::after {
+            content: ''; position: absolute; right: -50px; bottom: -50px; width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+        }
+        .balance-title { font-size: 10px; color: #777; letter-spacing: 3px; font-weight: 800; text-transform: uppercase; }
+        .balance-num { font-size: 45px; font-weight: 900; color: #fff; margin: 15px 0; font-family: 'Orbitron'; }
+        
+        .hero-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
+        .btn-act { 
+            padding: 16px; border-radius: 20px; border: none; font-weight: 900; font-size: 13px; 
+            display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s;
+        }
+        .btn-deposit { background: var(--gold); color: #000; box-shadow: 0 10px 20px rgba(255,215,0,0.2); }
+        .btn-withdraw { background: #1a1a1a; color: #fff; border: 1px solid #333; }
+
+        /* Investment Cards */
+        .section-header { margin: 30px 15px 15px; display: flex; align-items: center; justify-content: space-between; }
+        .section-header h3 { font-family: 'Orbitron'; font-size: 16px; color: var(--gold); letter-spacing: 1px; }
+
+        .investment-grid { display: flex; flex-direction: column; gap: 15px; padding: 0 15px; }
+        .beta-card {
+            background: var(--card); border-radius: 28px; padding: 25px; border: 1px solid #222;
+            transition: 0.3s; animation: slideUp 0.8s ease backwards; position: relative;
+        }
+        .beta-card:active { transform: scale(0.98); border-color: var(--gold); }
+        .beta-tag { 
+            position: absolute; top: 20px; right: 20px; background: rgba(0,255,136,0.1); 
+            color: var(--green); font-size: 10px; padding: 5px 12px; border-radius: 10px; font-weight: bold;
+        }
+        .beta-name { font-size: 20px; font-weight: 900; margin-bottom: 5px; font-family: 'Orbitron'; }
+        .beta-price { font-size: 24px; color: var(--gold); font-weight: 800; margin-bottom: 20px; }
+        
+        .beta-details { display: flex; justify-content: space-between; border-top: 1px solid #222; padding-top: 15px; }
+        .detail-box span { display: block; font-size: 10px; color: #555; margin-bottom: 4px; }
+        .detail-box b { font-size: 14px; }
+
+        .buy-now { 
+            width: 100%; margin-top: 20px; padding: 16px; border-radius: 18px; border: none;
+            background: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728);
+            font-weight: 900; color: #000; cursor: pointer; font-size: 14px;
+        }
+
+        /* Floating Tele Icon */
+        .floating-support {
+            position: fixed; bottom: 110px; right: 20px; z-index: 999;
+        }
+        .tele-btn {
+            width: 65px; height: 65px; background: #0088cc; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 30px; box-shadow: 0 10px 30px rgba(0,136,204,0.4);
+            animation: bounce 2s infinite ease-in-out; text-decoration: none;
+            border: 3px solid #fff;
+        }
+        .tele-pulse {
+            position: absolute; top: 0; left: 0; width: 65px; height: 65px;
+            background: #0088cc; border-radius: 50%; z-index: -1;
+            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+
+        /* Bottom Menu */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 85px;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(20px);
+            display: flex; justify-content: space-around; align-items: center;
+            border-top: 1px solid #222; z-index: 1000;
+        }
+        .nav-link { color: #444; font-size: 22px; transition: 0.3s; position: relative; }
+        .nav-link.active { color: var(--gold); }
+        .nav-link.active::after {
+            content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            width: 20px; height: 3px; background: var(--gold); border-radius: 10px;
+        }
+
+        /* --- Custom Scrollbar --- */
+        ::-webkit-scrollbar { width: 0; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="user-profile">
+            <div class="avatar-circle"><i class="fas fa-gem" style="color: var(--gold);"></i></div>
+            <div>
+                <p id="display_phone" style="font-weight: 800; font-size: 15px;">098****888</p>
+                <div style="display:flex; align-items:center; gap:5px;">
+                    <span style="width:6px; height:6px; background:var(--green); border-radius:50%;"></span>
+                    <span style="font-size:10px; color:var(--green); font-weight:bold;">Đang trực tuyến</span>
+                </div>
+            </div>
+        </div>
+        <i class="fas fa-qrcode" style="font-size: 22px; color: #444;"></i>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-hero">
+            <p class="balance-title">Tổng vốn đầu tư hiện có</p>
+            <h1 class="balance-num" id="u_balance">0đ</h1>
+            <div style="display:flex; gap:15px;">
+                <p style="font-size:11px; color:var(--green);"><i class="fas fa-chart-line"></i> +8.5% Hôm nay</p>
+                <p style="font-size:11px; color:#555;"><i class="fas fa-user-shield"></i> Tài khoản đã xác thực</p>
+            </div>
+            <div class="hero-actions">
+                <button class="btn-act btn-deposit" onclick="alert('Liên hệ Admin để nạp!')"><i class="fas fa-plus-circle"></i> NẠP TIỀN</button>
+                <button class="btn-act btn-withdraw" onclick="handleWithdraw()"><i class="fas fa-wallet"></i> RÚT TIỀN</button>
+            </div>
+        </div>
+
+        <div style="margin: 20px 0; background: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid #1a1a1a;">
+            <h4 style="font-family: 'Orbitron'; color: var(--gold); font-size: 14px; margin-bottom: 10px;">BUTTERLESS QUANTUM AI</h4>
+            <p style="font-size: 12px; color: #777; line-height: 1.6;">Hệ thống khai thác lợi nhuận thông qua các gói đầu tư BETA cấp độ cao. Tự động trả thưởng mỗi 24 giờ. Cam kết an toàn vốn 100%.</p>
+        </div>
+
+        <div class="section-header">
+            <h3>DANH MỤC ĐẦU TƯ</h3>
+            <span style="font-size: 10px; color: #555;">Tất cả gói <i class="fas fa-chevron-right"></i></span>
+        </div>
+
+        <div class="investment-grid" id="beta-list">
+            </div>
+    </div>
+
+    <div class="floating-support">
+        <div class="tele-pulse"></div>
+        <a href="https://t.me/Officiallsupports" target="_blank" class="tele-btn">
+            <i class="fab fa-telegram-plane"></i>
+        </a>
+        <p style="text-align:center; font-size:10px; margin-top:5px; color:var(--gold); font-weight:bold;">HỖ TRỢ</p>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-link active"><i class="fas fa-home"></i></div>
+        <div class="nav-link" onclick="alert('Chức năng Lịch sử đang bảo trì!')"><i class="fas fa-history"></i></div>
+        <div class="nav-link" onclick="alert('Tính năng Ref đang cập nhật!')"><i class="fas fa-share-alt"></i></div>
+        <div class="nav-link" onclick="logout()"><i class="fas fa-sign-out-alt"></i></div>
+    </nav>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        const supabase = createClient('https://fgartftwimourooudcrp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o')
+
+        const phone = localStorage.getItem('user_session');
+        const listContainer = document.getElementById('beta-list');
+        let userBalance = 0;
+        let hasInvested = false;
+
+        // DANH SÁCH GÓI ĐẦU TƯ YÊU CẦU
+        const packages = [
+            { id: 1, name: 'BETA 1', price: 90000, profit: '12%', cycle: '10 Ngày' },
+            { id: 2, name: 'BETA 2', price: 200000, profit: '15%', cycle: '15 Ngày' },
+            { id: 3, name: 'BETA 3', price: 500000, profit: '18%', cycle: '20 Ngày' },
+            { id: 4, name: 'BETA 4', price: 1000000, profit: '22%', cycle: '30 Ngày' },
+            { id: 5, name: 'BETA 5', price: 3000000, profit: '25%', cycle: '40 Ngày' },
+            { id: 6, name: 'BETA 6', price: 5000000, profit: '30%', cycle: '50 Ngày' },
+            { id: 7, name: 'BETA 7', price: 8000000, profit: '40%', cycle: '60 Ngày' }
+        ];
+
+        window.onload = async () => {
+            if(!phone) { window.location.href = 'login.html'; return; }
+            document.getElementById('display_phone').innerText = "ID: " + phone.substring(0,3) + "****" + phone.substring(7);
+            
+            await fetchUserData();
+            renderPackages();
+        }
+
+        async function fetchUserData() {
+            const { data } = await supabase.from('users').select('*').eq('phone', phone).single();
+            if(data) {
+                userBalance = data.balance;
+                hasInvested = data.has_invested;
+                animateNumber('u_balance', data.balance);
+            }
+        }
+
+        function renderPackages() {
+            listContainer.innerHTML = packages.map((p, index) => `
+                <div class="beta-card" style="animation-delay: ${index * 0.1}s">
+                    <div class="beta-tag">HOT PROJECT</div>
+                    <p class="beta-name">${p.name}</p>
+                    <p class="beta-price">${new Intl.NumberFormat('vi-VN').format(p.price)}đ</p>
+                    <div class="beta-details">
+                        <div class="detail-box"><span>Lợi nhuận</span><b>+${p.profit}</b></div>
+                        <div class="detail-box"><span>Chu kỳ</span><b>${p.cycle}</b></div>
+                        <div class="detail-box"><span>Trạng thái</span><b style="color:var(--green)">Sẵn sàng</b></div>
+                    </div>
+                    <button class="buy-now" onclick="buyPackage('${p.name}', ${p.price})">KÍCH HOẠT GÓI</button>
+                </div>
+            `).join('');
+        }
+
+        window.buyPackage = async (name, price) => {
+            if(userBalance < price) return alert("SỐ DƯ KHÔNG ĐỦ! Vui lòng nạp thêm để đầu tư gói " + name);
+            
+            const confirmBuy = confirm(`Bạn muốn kích hoạt gói ${name} với giá ${new Intl.NumberFormat('vi-VN').format(price)}đ?`);
+            if(!confirmBuy) return;
+
+            const { error } = await supabase.from('users').update({ 
+                balance: userBalance - price, 
+                has_invested: true 
+            }).eq('phone', phone);
+
+            if(!error) {
+                // Ghi lịch sử
+                await supabase.from('history').insert([{ phone, type: 'Đầu tư: ' + name, amount: price, status: 'Thành công' }]);
+                alert("ĐẦU TƯ THÀNH CÔNG! Gói " + name + " đang bắt đầu khai thác lợi nhuận.");
+                location.reload();
+            }
+        }
+
+        window.handleWithdraw = () => {
+            if(!hasInvested) {
+                alert("CẢNH BÁO BẢO MẬT: Bạn chưa kích hoạt gói đầu tư BETA nào. Hệ thống yêu cầu ít nhất 1 gói đầu tư để kích hoạt cổng rút tiền!");
+            } else {
+                alert("Cổng rút tiền đang xử lý dữ liệu. Vui lòng quay lại sau!");
+            }
+        }
+
+        function animateNumber(id, target) {
+            let start = 0;
+            const step = target / 40;
+            const timer = setInterval(() => {
+                start += step;
+                if(start >= target) { start = target; clearInterval(timer); }
+                document.getElementById(id).innerText = new Intl.NumberFormat('vi-VN').format(Math.floor(start)) + "đ";
+            }, 25);
+        }
+
+        window.logout = () => { localStorage.clear(); window.location.href = 'login.html'; }
+    </script>
+</body>
+</html>
