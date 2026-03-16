@@ -3,109 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUANTUM ADMIN PANEL | CONTROL CENTER</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>QUANTUM ULTIMATE ADMIN | BUTTERLESS V5.0</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        :root { --gold: #FFD700; --bg: #0a0a0a; --card: #151515; --border: #222; --green: #00ff88; --red: #ff4d4d; }
+        :root {
+            --gold: #FFD700;
+            --gold-glow: rgba(255, 215, 0, 0.3);
+            --bg-dark: #050505;
+            --card-bg: #0f0f0f;
+            --border: #1a1a1a;
+            --green: #00ff88;
+            --red: #ff4d4d;
+            --text-gray: #888888;
+        }
+
+        /* --- RESET & BASIC --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; padding: 20px; }
-        h1, h2 { font-family: 'Orbitron'; color: var(--gold); margin-bottom: 20px; }
-        
-        /* Dashboard Stats */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .stat-card { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid var(--border); text-align: center; }
-        .stat-card i { font-size: 24px; color: var(--gold); margin-bottom: 10px; }
-        .stat-card h3 { font-size: 20px; }
+        body { 
+            background: var(--bg-dark); color: #fff; font-family: 'Inter', sans-serif; 
+            display: flex; min-height: 100vh; overflow: hidden;
+        }
 
-        /* Search Box */
-        .search-box { margin-bottom: 20px; display: flex; gap: 10px; }
-        .search-box input { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: #000; color: #fff; }
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 280px; background: #000; border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; padding: 30px 20px;
+        }
+        .logo { font-family: 'Orbitron'; color: var(--gold); font-size: 18px; font-weight: 900; margin-bottom: 50px; text-align: center; letter-spacing: 2px; }
+        .nav-menu { flex: 1; }
+        .nav-item {
+            padding: 15px 20px; border-radius: 12px; color: var(--text-gray);
+            cursor: pointer; margin-bottom: 10px; transition: 0.3s;
+            display: flex; align-items: center; gap: 12px; font-family: 'Orbitron'; font-size: 11px;
+        }
+        .nav-item i { font-size: 16px; width: 25px; }
+        .nav-item:hover, .nav-item.active { background: var(--card-bg); color: var(--gold); border: 1px solid var(--border); }
 
-        /* Tables */
-        .table-container { background: var(--card); border-radius: 20px; border: 1px solid var(--border); overflow-x: auto; margin-bottom: 30px; }
-        table { width: 100%; border-collapse: collapse; min-width: 800px; }
-        th { background: #111; padding: 15px; text-align: left; font-family: 'Orbitron'; font-size: 11px; color: var(--gold); }
-        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 13px; }
+        /* --- MAIN CONTENT --- */
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; background: #080808; }
+        header { padding: 25px 40px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         
-        /* Buttons */
-        .btn { padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; font-size: 11px; text-transform: uppercase; }
-        .btn-green { background: var(--green); color: #000; }
-        .btn-red { background: var(--red); color: #fff; }
-        .btn-gold { background: var(--gold); color: #000; }
+        /* --- DASHBOARD STATS --- */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 30px 40px; }
+        .stat-card { background: var(--card-bg); padding: 25px; border-radius: 20px; border: 1px solid var(--border); }
+        .stat-card p { font-size: 10px; color: var(--text-gray); font-family: 'Orbitron'; margin-bottom: 10px; }
+        .stat-card h2 { font-family: 'Orbitron'; font-size: 20px; color: var(--gold); }
 
-        .status-badge { padding: 4px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; }
-        .pending { background: rgba(255, 215, 0, 0.1); color: var(--gold); }
-        .success { background: rgba(0, 255, 136, 0.1); color: var(--green); }
+        /* --- TABLE SECTION --- */
+        .table-section { padding: 0 40px 40px; }
+        .table-container { 
+            background: var(--card-bg); border-radius: 25px; border: 1px solid var(--border); 
+            overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .table-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+        .search-input { 
+            background: #000; border: 1px solid var(--border); padding: 12px 20px; 
+            border-radius: 12px; color: #fff; width: 300px; outline: none; transition: 0.3s;
+        }
+        .search-input:focus { border-color: var(--gold); }
+
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { padding: 20px; font-family: 'Orbitron'; font-size: 10px; color: var(--text-gray); text-transform: uppercase; border-bottom: 1px solid var(--border); }
+        td { padding: 18px 20px; font-size: 13px; border-bottom: 1px solid #121212; }
         
-        .tab-menu { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { background: #111; color: #888; padding: 10px 20px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; font-family: 'Orbitron'; font-size: 11px; }
-        .tab-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
-        .section { display: none; }
-        .section.active { display: block; }
+        /* --- UTILS --- */
+        .btn { 
+            padding: 8px 15px; border-radius: 8px; border: none; font-family: 'Orbitron'; 
+            font-size: 9px; cursor: pointer; font-weight: 900; transition: 0.3s;
+        }
+        .btn-approve { background: var(--green); color: #000; }
+        .btn-edit { background: var(--gold); color: #000; }
+        .btn-delete { background: var(--red); color: #fff; }
+        
+        .badge { padding: 5px 10px; border-radius: 6px; font-size: 9px; font-weight: 800; font-family: 'Orbitron'; }
+        .bg-pending { background: rgba(255, 215, 0, 0.1); color: var(--gold); }
+        .bg-success { background: rgba(0, 255, 136, 0.1); color: var(--green); }
+
+        /* --- MODAL --- */
+        .modal { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9); 
+            display: none; align-items: center; justify-content: center; z-index: 9999;
+        }
+        .modal-content { 
+            background: var(--card-bg); padding: 40px; border-radius: 25px; 
+            border: 1px solid var(--gold); width: 400px; text-align: center;
+        }
+        .modal-content input { 
+            width: 100%; background: #000; border: 1px solid #333; 
+            padding: 15px; border-radius: 12px; color: #fff; margin: 20px 0; outline: none;
+        }
+
+        .section-panel { display: none; }
+        .section-panel.active { display: block; }
     </style>
 </head>
 <body>
 
-    <h2><i class="fas fa-user-shield"></i> QUANTUM COMMAND CENTER</h2>
-
-    <div class="tab-menu">
-        <button class="tab-btn active" onclick="switchTab('users')">NGƯỜI DÙNG</button>
-        <button class="tab-btn" onclick="switchTab('transactions')">DUYỆT NẠP/RÚT</button>
-        <button class="tab-btn" onclick="switchTab('investments')">GÓI ĐẦU TƯ</button>
-    </div>
-
-    <div id="users" class="section active">
-        <div class="search-box">
-            <input type="text" id="searchUser" placeholder="Tìm theo SĐT khách..." oninput="filterUsers()">
-        </div>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>SĐT</th>
-                        <th>MẬT KHẨU</th>
-                        <th>SỐ DƯ</th>
-                        <th>THAO TÁC</th>
-                    </tr>
-                </thead>
-                <tbody id="user-list"></tbody>
-            </table>
+    <div class="sidebar">
+        <div class="logo">QUANTUM PANEL</div>
+        <div class="nav-menu">
+            <div class="nav-item active" onclick="switchPanel('users-panel', this)">
+                <i class="fas fa-users"></i> QUẢN LÝ NGƯỜI DÙNG
+            </div>
+            <div class="nav-item" onclick="switchPanel('deposit-panel', this)">
+                <i class="fas fa-wallet"></i> DUYỆT NẠP TIỀN
+            </div>
+            <div class="nav-item" onclick="switchPanel('withdraw-panel', this)">
+                <i class="fas fa-hand-holding-usd"></i> DUYỆT RÚT TIỀN
+            </div>
+            <div class="nav-item" onclick="switchPanel('invest-panel', this)">
+                <i class="fas fa-cube"></i> GÓI ĐANG CHẠY
+            </div>
         </div>
     </div>
 
-    <div id="transactions" class="section">
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>LOẠI</th>
-                        <th>KHÁCH HÀNG</th>
-                        <th>SỐ TIỀN</th>
-                        <th>NỘI DUNG</th>
-                        <th>TRẠNG THÁI</th>
-                        <th>HÀNH ĐỘNG</th>
-                    </tr>
-                </thead>
-                <tbody id="tx-list"></tbody>
-            </table>
+    <div class="main-content">
+        <header>
+            <h2 id="panel-title">HỆ THỐNG QUẢN TRỊ</h2>
+            <div id="admin-info" style="font-size: 11px; color: var(--gold); font-family: 'Orbitron';">CONNECTED: SUPABASE CLOUD</div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <p>TỔNG THÀNH VIÊN</p>
+                <h2 id="stat-users">0</h2>
+            </div>
+            <div class="stat-card">
+                <p>TỔNG VỐN ĐẦU TƯ</p>
+                <h2 id="stat-invest">0đ</h2>
+            </div>
+            <div class="stat-card">
+                <p>LỆNH NẠP CHỜ</p>
+                <h2 id="stat-pending-dep" style="color: var(--gold);">0</h2>
+            </div>
+            <div class="stat-card">
+                <p>LỆNH RÚT CHỜ</p>
+                <h2 id="stat-pending-draw" style="color: var(--red);">0</h2>
+            </div>
+        </div>
+
+        <div id="users-panel" class="section-panel active">
+            <div class="table-section">
+                <div class="table-container">
+                    <div class="table-header">
+                        <span style="font-family: 'Orbitron'; font-size: 12px;">DANH SÁCH THÀNH VIÊN</span>
+                        <input type="text" class="search-input" placeholder="Tìm SĐT khách..." oninput="searchData('user-table', this.value)">
+                    </div>
+                    <table id="user-table">
+                        <thead>
+                            <tr>
+                                <th>SĐT</th>
+                                <th>MẬT KHẨU</th>
+                                <th>SỐ DƯ</th>
+                                <th>HÀNH ĐỘNG</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-list"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="deposit-panel" class="section-panel">
+            <div class="table-section">
+                <div class="table-container">
+                    <div class="table-header">
+                        <span style="font-family: 'Orbitron'; font-size: 12px;">YÊU CẦU NẠP TIỀN</span>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>THỜI GIAN</th>
+                                <th>SĐT</th>
+                                <th>SỐ TIỀN</th>
+                                <th>TRẠNG THÁI</th>
+                                <th>THAO TÁC</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deposit-list"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="withdraw-panel" class="section-panel">
+            <div class="table-section">
+                <div class="table-container">
+                    <div class="table-header">
+                        <span style="font-family: 'Orbitron'; font-size: 12px;">YÊU CẦU RÚT TIỀN</span>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>THỜI GIAN</th>
+                                <th>SĐT</th>
+                                <th>SỐ TIỀN</th>
+                                <th>THÔNG TIN BANK</th>
+                                <th>THAO TÁC</th>
+                            </tr>
+                        </thead>
+                        <tbody id="withdraw-list"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="invest-panel" class="section-panel">
+            <div class="table-section">
+                <div class="table-container">
+                    <div class="table-header">
+                        <span style="font-family: 'Orbitron'; font-size: 12px;">GÓI ĐẦU TƯ ĐANG CHẠY</span>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>KHÁCH HÀNG</th>
+                                <th>LOẠI GÓI</th>
+                                <th>VỐN ĐẦU TƯ</th>
+                                <th>NGÀY MUA</th>
+                                <th>TRẠNG THÁI</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invest-list"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="investments" class="section">
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>KHÁCH HÀNG</th>
-                        <th>TÊN GÓI</th>
-                        <th>VỐN</th>
-                        <th>NGÀY MUA</th>
-                        <th>TRẠNG THÁI</th>
-                    </tr>
-                </thead>
-                <tbody id="invest-list"></tbody>
-            </table>
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3 style="font-family: 'Orbitron'; color: var(--gold);">SỬA SỐ DƯ</h3>
+            <p id="edit-phone" style="font-size: 12px; margin-top: 10px;"></p>
+            <input type="number" id="new-balance" placeholder="Nhập số dư mới...">
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-approve" style="flex: 1; padding: 15px;" onclick="saveBalance()">CẬP NHẬT</button>
+                <button class="btn btn-delete" style="flex: 1; padding: 15px;" onclick="closeModal()">HỦY</button>
+            </div>
         </div>
     </div>
 
@@ -113,87 +250,130 @@
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
         const supabase = createClient('https://fgartftwimourooudcrp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o');
 
-        window.switchTab = (id) => {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        let currentEditPhone = '';
+
+        // --- NAVIGATION ---
+        window.switchPanel = (id, el) => {
+            document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            event.target.classList.add('active');
-            if(id === 'users') loadUsers();
-            if(id === 'transactions') loadTransactions();
-            if(id === 'investments') loadInvestments();
-        };
+            el.classList.add('active');
+            refreshAll();
+        }
 
-        // --- LOAD NGƯỜI DÙNG ---
-        async function loadUsers() {
-            const { data } = await supabase.from('users').select('*').order('created_at', {ascending: false});
-            const list = document.getElementById('user-list');
-            list.innerHTML = data.map(u => `
+        // --- LOAD DATA ---
+        async function refreshAll() {
+            const { data: users } = await supabase.from('users').select('*').order('created_at', {ascending: false});
+            const { data: logs } = await supabase.from('history').select('*').order('created_at', {ascending: false});
+
+            if(users) {
+                renderUsers(users);
+                document.getElementById('stat-users').innerText = users.length;
+            }
+            if(logs) {
+                renderDeposits(logs.filter(l => l.type.includes('Nạp')));
+                renderWithdrawals(logs.filter(l => l.type.includes('Rút')));
+                renderInvestments(logs.filter(l => l.type.includes('Đầu tư')));
+                
+                // Stats
+                document.getElementById('stat-invest').innerText = logs.filter(l => l.type.includes('Đầu tư')).reduce((a,b) => a + b.amount, 0).toLocaleString() + 'đ';
+                document.getElementById('stat-pending-dep').innerText = logs.filter(l => l.type.includes('Nạp') && l.status === 'Chờ duyệt').length;
+                document.getElementById('stat-pending-draw').innerText = logs.filter(l => l.type.includes('Rút') && l.status === 'Chờ duyệt').length;
+            }
+        }
+
+        function renderUsers(data) {
+            document.getElementById('user-list').innerHTML = data.map(u => `
                 <tr>
-                    <td><b>${u.phone}</b></td>
+                    <td><b style="color:var(--gold)">${u.phone}</b></td>
                     <td>${u.password}</td>
-                    <td class="c-green">${u.balance.toLocaleString()}đ</td>
+                    <td style="color:var(--green); font-weight:800">${u.balance.toLocaleString()}đ</td>
                     <td>
-                        <button class="btn btn-gold" onclick="editBalance('${u.phone}', ${u.balance})">SỬA TIỀN</button>
+                        <button class="btn btn-edit" onclick="openEditModal('${u.phone}', ${u.balance})">SỬA TIỀN</button>
                     </td>
                 </tr>
             `).join('');
         }
 
-        // --- LOAD DUYỆT NẠP/RÚT ---
-        async function loadTransactions() {
-            const { data } = await supabase.from('history').select('*').neq('type', 'Đầu tư').order('created_at', {ascending: false});
-            const list = document.getElementById('tx-list');
-            list.innerHTML = data.map(t => `
+        function renderDeposits(data) {
+            document.getElementById('deposit-list').innerHTML = data.map(l => `
                 <tr>
-                    <td style="color:${t.type === 'Nạp tiền' ? '#00ff88' : '#ff4d4d'}">${t.type}</td>
-                    <td>${t.phone}</td>
-                    <td>${t.amount.toLocaleString()}đ</td>
-                    <td style="font-size:10px">${t.note || ''}</td>
-                    <td><span class="status-badge ${t.status === 'Thành công' ? 'success' : 'pending'}">${t.status}</span></td>
+                    <td>${new Date(l.created_at).toLocaleString()}</td>
+                    <td>${l.phone}</td>
+                    <td>${l.amount.toLocaleString()}đ</td>
+                    <td><span class="badge ${l.status === 'Thành công' ? 'bg-success' : 'bg-pending'}">${l.status}</span></td>
                     <td>
-                        ${t.status === 'Chờ duyệt' ? `<button class="btn btn-green" onclick="approveTx('${t.id}', '${t.type}', '${t.phone}', ${t.amount})">DUYỆT</button>` : '---'}
+                        ${l.status === 'Chờ duyệt' ? `<button class="btn btn-approve" onclick="approveDeposit('${l.id}', '${l.phone}', ${l.amount})">DUYỆT NẠP</button>` : '---'}
                     </td>
                 </tr>
             `).join('');
         }
 
-        // --- LOAD GÓI ĐẦU TƯ ---
-        async function loadInvestments() {
-            const { data } = await supabase.from('history').select('*').eq('type', 'Đầu tư').order('created_at', {ascending: false});
-            const list = document.getElementById('invest-list');
-            list.innerHTML = data.map(i => `
+        function renderWithdrawals(data) {
+            document.getElementById('withdraw-list').innerHTML = data.map(l => `
                 <tr>
-                    <td>${i.phone}</td>
-                    <td>${i.type}</td>
-                    <td>${i.amount.toLocaleString()}đ</td>
-                    <td>${new Date(i.created_at).toLocaleDateString()}</td>
-                    <td><span class="status-badge ${i.status === 'Đã nhận lãi' ? 'success' : 'pending'}">${i.status}</span></td>
+                    <td>${new Date(l.created_at).toLocaleString()}</td>
+                    <td>${l.phone}</td>
+                    <td style="color:var(--red)">-${l.amount.toLocaleString()}đ</td>
+                    <td style="font-size:10px; color:#666">${l.note}</td>
+                    <td>
+                        ${l.status === 'Chờ duyệt' ? `<button class="btn btn-approve" onclick="approveWithdraw('${l.id}')">DUYỆT RÚT</button>` : `<span class="badge bg-success">ĐÃ DUYỆT</span>`}
+                    </td>
                 </tr>
             `).join('');
         }
 
-        // --- HÀNH ĐỘNG ---
-        window.editBalance = async (phone, current) => {
-            const newBal = prompt(`Nhập số dư mới cho ${phone}:`, current);
-            if(newBal !== null) {
-                await supabase.from('users').update({ balance: parseInt(newBal) }).eq('phone', phone);
-                loadUsers();
-            }
-        };
+        function renderInvestments(data) {
+            document.getElementById('invest-list').innerHTML = data.map(l => `
+                <tr>
+                    <td>${l.phone}</td>
+                    <td>${l.type}</td>
+                    <td>${l.amount.toLocaleString()}đ</td>
+                    <td>${new Date(l.created_at).toLocaleDateString()}</td>
+                    <td><span class="badge ${l.status === 'Đã nhận lãi' ? 'bg-success' : 'bg-pending'}">${l.status}</span></td>
+                </tr>
+            `).join('');
+        }
 
-        window.approveTx = async (id, type, phone, amt) => {
-            if(!confirm("Bạn có chắc chắn muốn duyệt lệnh này?")) return;
-            
-            if(type === 'Nạp tiền') {
-                const { data:u } = await supabase.from('users').select('balance').eq('phone', phone).single();
-                await supabase.from('users').update({ balance: u.balance + amt }).eq('phone', phone);
-            }
-            // Nếu là rút tiền thì thường tiền đã trừ lúc khách bấm rút rồi, chỉ cần đổi trạng thái
+        // --- ACTIONS ---
+        window.approveDeposit = async (id, phone, amt) => {
+            if(!confirm("Xác nhận nạp " + amt.toLocaleString() + " cho " + phone + "?")) return;
+            const { data:user } = await supabase.from('users').select('balance').eq('phone', phone).single();
+            await supabase.from('users').update({ balance: user.balance + amt }).eq('phone', phone);
             await supabase.from('history').update({ status: 'Thành công' }).eq('id', id);
-            loadTransactions();
-        };
+            refreshAll();
+        }
 
-        window.onload = loadUsers;
+        window.approveWithdraw = async (id) => {
+            if(!confirm("Xác nhận đã chuyển tiền cho khách?")) return;
+            await supabase.from('history').update({ status: 'Thành công' }).eq('id', id);
+            refreshAll();
+        }
+
+        window.openEditModal = (phone, bal) => {
+            currentEditPhone = phone;
+            document.getElementById('edit-phone').innerText = "Đang sửa cho: " + phone;
+            document.getElementById('new-balance').value = bal;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        window.closeModal = () => document.getElementById('editModal').style.display = 'none';
+
+        window.saveBalance = async () => {
+            const val = parseInt(document.getElementById('new-balance').value);
+            await supabase.from('users').update({ balance: val }).eq('phone', currentEditPhone);
+            closeModal();
+            refreshAll();
+        }
+
+        window.searchData = (tableId, val) => {
+            const rows = document.getElementById(tableId).getElementsByTagName('tr');
+            for(let i = 1; i < rows.length; i++) {
+                rows[i].style.display = rows[i].innerText.toLowerCase().includes(val.toLowerCase()) ? '' : 'none';
+            }
+        }
+
+        window.onload = refreshAll;
     </script>
 </body>
 </html>
