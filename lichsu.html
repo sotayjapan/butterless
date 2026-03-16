@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NHẬT KÝ GIAO DỊCH | QUANTUM</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --gold: #FFD700;
+            --bg: #000;
+            --card: rgba(15, 15, 15, 0.98);
+            --border: rgba(255, 215, 0, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+        header {
+            padding: 25px 20px; text-align: center; border-bottom: 1px solid var(--border);
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+        }
+        header h2 { font-family: 'Orbitron'; font-size: 15px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; }
+
+        .container { padding: 20px; }
+
+        /* Vùng hiển thị lịch sử */
+        #history-content {
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- TRẠNG THÁI TRỐNG (MẶC ĐỊNH) --- */
+        .empty-box {
+            margin: auto;
+            text-align: center;
+            padding: 50px 20px;
+            animation: fadeIn 1.5s ease;
+        }
+        .empty-box i {
+            font-size: 60px;
+            background: linear-gradient(135deg, #222, #111);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px rgba(255,215,0,0.05));
+        }
+        .empty-box p {
+            font-size: 13px;
+            color: #444;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* --- ITEM KHI CÓ DỮ LIỆU --- */
+        .log-item {
+            background: var(--card);
+            border: 1px solid #111;
+            padding: 20px;
+            border-radius: 22px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--gold); /* Nhấn nhá vạch vàng cho đẳng cấp */
+        }
+        .log-left h4 { font-size: 14px; margin-bottom: 5px; color: #fff; }
+        .log-left span { font-size: 10px; color: #555; font-weight: 700; }
+        
+        .log-right { text-align: right; }
+        .log-right b { font-family: 'Orbitron'; font-size: 15px; display: block; margin-bottom: 5px; }
+        .stt { font-size: 9px; padding: 3px 10px; border-radius: 50px; font-weight: 900; }
+        
+        .stt-pending { background: rgba(255, 215, 0, 0.1); color: var(--gold); }
+        .stt-success { background: rgba(0, 255, 136, 0.1); color: #00ff88; }
+
+        /* Nav Bottom */
+        nav {
+            position: fixed; bottom: 0; width: 100%; background: #080808;
+            display: flex; justify-content: space-around; padding: 15px 0;
+            border-top: 1px solid #111;
+        }
+        nav a { color: #333; text-decoration: none; font-size: 9px; text-align: center; font-weight: 700; }
+        nav a.active { color: var(--gold); }
+        nav i { font-size: 18px; display: block; margin-bottom: 5px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>Dữ liệu giao dịch</h2>
+    </header>
+
+    <div class="container">
+        <div id="history-content">
+            <div class="empty-box">
+                <i class="fas fa-folder-open"></i>
+                <p>Chưa có lịch sử giao dịch</p>
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <a href="index.html"><i class="fas fa-th-large"></i>SÀN GIAO DỊCH</a>
+        <a href="lichsu.html" class="active"><i class="fas fa-chart-line"></i>LỊCH SỬ</a>
+        <a href="profile.html"><i class="fas fa-user-shield"></i>TÀI KHOẢN</a>
+    </nav>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        const supabase = createClient('https://fgartftwimourooudcrp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o');
+
+        const phone = localStorage.getItem('user_session');
+
+        async function fetchLogs() {
+            if(!phone) return;
+
+            const { data, error } = await supabase
+                .from('history')
+                .select('*')
+                .eq('phone', phone)
+                .order('created_at', { ascending: false });
+
+            const container = document.getElementById('history-content');
+
+            if(data && data.length > 0) {
+                // Nếu có dữ liệu, xóa sạch cái "Trống" đi và render list
+                container.innerHTML = data.map(item => `
+                    <div class="log-item animate__animated animate__fadeInUp">
+                        <div class="log-left">
+                            <h4>${item.type}</h4>
+                            <span>${new Date(item.created_at).toLocaleString('vi-VN')}</span>
+                        </div>
+                        <div class="log-right">
+                            <b style="color: ${item.type === 'Nạp tiền' ? '#00ff88' : '#ff4d4d'}">
+                                ${item.type === 'Nạp tiền' ? '+' : '-'}${item.amount.toLocaleString()}đ
+                            </b>
+                            <span class="stt ${item.status === 'Thành công' ? 'stt-success' : 'stt-pending'}">
+                                ${item.status}
+                            </span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            // Nếu không có dữ liệu (data trống), thì cái div .empty-box vẫn giữ nguyên.
+        }
+
+        fetchLogs();
+    </script>
+</body>
+</html>
