@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RÚT TIỀN QUANTUM | VIP SYSTEM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --gold: #FFD700; --bg: #000; --card: #111; --border: #222; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; padding-bottom: 50px; }
+        header { padding: 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid var(--border); background: #000; position: sticky; top: 0; z-index: 100; }
+        header h2 { font-family: 'Orbitron'; font-size: 14px; color: var(--gold); letter-spacing: 2px; }
+        .container { padding: 20px; }
+        .vip-card { background: var(--card); border-radius: 20px; border: 1px solid var(--border); padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .label { font-size: 10px; color: var(--gold); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; display: block; font-weight: 800; }
+        .input-group { margin-bottom: 15px; }
+        .input-group select, .input-group input { width: 100%; background: #000; border: 1px solid #333; padding: 15px; border-radius: 12px; color: #fff; outline: none; font-size: 14px; appearance: none; }
+        .btn-withdraw { width: 100%; padding: 18px; border-radius: 15px; border: none; background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728); color: #000; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; text-transform: uppercase; font-size: 12px; }
+        .btn-withdraw:disabled { background: #222 !important; color: #555 !important; cursor: not-allowed; }
+        #lock-msg { background: rgba(255, 77, 77, 0.1); padding: 12px; border-radius: 10px; color: #ff4d4d; font-size: 10px; text-align: center; margin-top: 15px; display: none; font-weight: bold; }
+        .h-item { padding: 15px; border-bottom: 1px solid #151515; display: flex; justify-content: space-between; align-items: center; }
+        .h-status { text-align: right; }
+        .h-status b { color: var(--gold); font-family: 'Orbitron'; font-size: 14px; display: block; }
+        .h-status span { font-size: 9px; font-weight: 800; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" style="color:var(--gold)"><i class="fas fa-chevron-left"></i></a>
+        <h2>RÚT VỐN ĐẦU TƯ</h2>
+    </header>
+    <div class="container">
+        <div class="vip-card">
+            <span class="label">Xác thực tài khoản thụ hưởng</span>
+            <div class="input-group">
+                <select id="bank-name">
+                    <option value="">-- CHỌN NGÂN HÀNG (53 NGÂN HÀNG) --</option>
+                    <option value="Vietcombank">Vietcombank (VCB)</option>
+                    <option value="VietinBank">VietinBank (CTG)</option>
+                    <option value="BIDV">BIDV</option>
+                    <option value="Agribank">Agribank (VBA)</option>
+                    <option value="MBBank">MB Bank (MBB)</option>
+                    <option value="Techcombank">Techcombank (TCB)</option>
+                    <option value="VPBank">VPBank (VPB)</option>
+                    <option value="ACB">ACB</option>
+                    <option value="Sacombank">Sacombank (STB)</option>
+                    <option value="HDBank">HDBank (HDB)</option>
+                    <option value="SHB">SHB</option>
+                    <option value="VIB">VIB</option>
+                    <option value="TPBank">TPBank (TPB)</option>
+                    <option value="Eximbank">Eximbank (EIB)</option>
+                    <option value="LienVietPostBank">LPBank</option>
+                    <option value="SeABank">SeABank (SSB)</option>
+                    <option value="MSB">MSB</option>
+                    <option value="OCB">OCB</option>
+                    <option value="PVcomBank">PVcomBank</option>
+                    <option value="BacABank">Bac A Bank</option>
+                    <option value="DongABank">DongA Bank</option>
+                    <option value="BaoVietBank">BaoViet Bank</option>
+                    <option value="ABBANK">ABBANK</option>
+                    <option value="OceanBank">OceanBank</option>
+                    <option value="GPBank">GPBank</option>
+                    <option value="PGBank">PGBank</option>
+                    <option value="VietABank">VietABank</option>
+                    <option value="SaigonBank">SaigonBank</option>
+                    <option value="PublicBank">Public Bank</option>
+                    <option value="NamABank">Nam A Bank</option>
+                    <option value="KienLongBank">KienLongBank</option>
+                    <option value="UOB">UOB Việt Nam</option>
+                    <option value="ShinhanBank">Shinhan Bank</option>
+                    <option value="HSBC">HSBC Việt Nam</option>
+                    <option value="StandardChartered">Standard Chartered</option>
+                    <option value="WooriBank">Woori Bank</option>
+                    <option value="CIMB">CIMB Việt Nam</option>
+                    <option value="NCB">NCB (Quốc dân)</option>
+                    <option value="VietBank">VietBank</option>
+                    <option value="CBBank">CBBank</option>
+                    <option value="VRB">VRB (Việt - Nga)</option>
+                    <option value="IndovinaBank">Indovina Bank</option>
+                    <option value="HongLeongBank">Hong Leong Bank</option>
+                    <option value="Cake">Cake by VPBank</option>
+                    <option value="Ubank">Ubank by VPBank</option>
+                    <option value="Timo">Timo by Bản Việt</option>
+                    <option value="ViettelMoney">Viettel Money</option>
+                    <option value="VNPTMoney">VNPT Money</option>
+                    <option value="Momo">Ví MoMo</option>
+                    <option value="ZaloPay">Ví ZaloPay</option>
+                    <option value="ShopeePay">Ví ShopeePay</option>
+                    <option value="GrabPay">GrabPay (Moca)</option>
+                    <option value="VietCapitalBank">BVBank (Bản Việt)</option>
+                </select>
+            </div>
+            <div class="input-group"><input type="text" id="bank-number" placeholder="SỐ TÀI KHOẢN"></div>
+            <div class="input-group"><input type="text" id="bank-user" placeholder="HỌ VÀ TÊN CHỦ THẺ"></div>
+            <div class="input-group"><input type="number" id="draw-amt" placeholder="SỐ TIỀN MUỐN RÚT"></div>
+            <button class="btn-withdraw" id="btn-action" onclick="handleWithdraw()">XÁC NHẬN GỬI LỆNH</button>
+            <div id="lock-msg"><i class="fas fa-lock"></i> TÀI KHOẢN CHƯA KÍCH HOẠT. CẦN NẠP LẦN ĐẦU ĐỂ RÚT.</div>
+        </div>
+        <div class="history-box">
+            <span class="label">Lịch sử rút vốn</span>
+            <div id="history-container" style="background:#0a0a0a; border-radius:15px; overflow:hidden;"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        const supabase = createClient('https://fgartftwimourooudcrp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o');
+
+        const phone = localStorage.getItem('user_session');
+        let currentBalance = 0;
+
+        async function init() {
+            if(!phone) { window.location.href = 'login.html'; return; }
+            const { data: user } = await supabase.from('users').select('balance').eq('phone', phone).single();
+            if(user) currentBalance = user.balance;
+
+            const { data: depositCheck } = await supabase.from('history')
+                .select('id').eq('phone', phone).eq('type', 'Nạp tiền').eq('status', 'Thành công').limit(1);
+
+            const btn = document.getElementById('btn-action');
+            if(!depositCheck || depositCheck.length === 0) {
+                btn.disabled = true;
+                document.getElementById('lock-msg').style.display = 'block';
+            } else {
+                btn.disabled = false;
+                document.getElementById('lock-msg').style.display = 'none';
+            }
+            loadHistory();
+        }
+
+        async function loadHistory() {
+            const { data: logs } = await supabase.from('history').select('*').eq('phone', phone).eq('type', 'Rút tiền').order('created_at', {ascending: false});
+            const container = document.getElementById('history-container');
+            if(logs && logs.length > 0) {
+                container.innerHTML = logs.map(l => `
+                    <div class="h-item">
+                        <div>
+                            <div style="font-size:12px; font-weight:bold;">${l.note.split(' - ')[0]}</div>
+                            <div style="font-size:9px; color:#555;">${new Date(l.created_at).toLocaleString()}</div>
+                        </div>
+                        <div class="h-status">
+                            <b>-${l.amount.toLocaleString()}đ</b>
+                            <span style="color:${l.status === 'Thành công' ? '#00ff88' : 'var(--gold)'}">${l.status}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = '<div style="padding:20px; text-align:center; font-size:11px; color:#333;">Chưa có giao dịch</div>';
+            }
+        }
+
+        window.handleWithdraw = async () => {
+            const bank = document.getElementById('bank-name').value;
+            const num = document.getElementById('bank-number').value;
+            const user = document.getElementById('bank-user').value;
+            const amt = parseInt(document.getElementById('draw-amt').value);
+
+            if(!bank || !num || !user || isNaN(amt)) return alert("Vui lòng điền đủ thông tin!");
+            if(amt < 100000) return alert("Rút tối thiểu 100.000đ");
+            if(amt > currentBalance) return alert("Số dư không đủ!");
+
+            const btn = document.getElementById('btn-action');
+            btn.disabled = true;
+            btn.innerText = "ĐANG GỬI LỆNH...";
+
+            try {
+                // 1. Tạo history trước (Quan trọng: Admin sẽ thấy ngay)
+                const { error: err1 } = await supabase.from('history').insert([{
+                    phone: phone,
+                    type: 'Rút tiền',
+                    amount: amt,
+                    status: 'Chờ duyệt',
+                    note: `${bank} - ${num} - ${user}`
+                }]);
+                if(err1) throw err1;
+
+                // 2. Trừ tiền tài khoản
+                const { error: err2 } = await supabase.from('users').update({ balance: currentBalance - amt }).eq('phone', phone);
+                if(err2) throw err2;
+
+                alert("✨ Lệnh rút thành công! Tiền sẽ được duyệt trong giây lát.");
+                location.reload();
+            } catch (e) {
+                alert("Lỗi hệ thống: " + e.message);
+                btn.disabled = false;
+                btn.innerText = "XÁC NHẬN GỬI LỆNH";
+            }
+        }
+        init();
+    </script>
+</body>
+</html>
