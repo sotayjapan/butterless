@@ -2,8 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUANTUM ULTIMATE ADMIN | BUTTERLESS V5.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>QUANTUM ADMIN MOBILE</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,369 +11,186 @@
     <style>
         :root {
             --gold: #FFD700;
-            --gold-glow: rgba(255, 215, 0, 0.3);
-            --bg-dark: #050505;
-            --card-bg: #0f0f0f;
-            --border: #1a1a1a;
+            --bg: #000;
+            --card: #111;
+            --border: #222;
             --green: #00ff88;
             --red: #ff4d4d;
-            --text-gray: #888888;
         }
 
-        /* --- RESET & BASIC --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background: var(--bg-dark); color: #fff; font-family: 'Inter', sans-serif; 
-            display: flex; min-height: 100vh; overflow: hidden;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; padding-bottom: 100px; }
 
-        /* --- SIDEBAR --- */
-        .sidebar {
-            width: 280px; background: #000; border-right: 1px solid var(--border);
-            display: flex; flex-direction: column; padding: 30px 20px;
+        /* HEADER */
+        header {
+            padding: 15px 20px; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .logo { font-family: 'Orbitron'; color: var(--gold); font-size: 18px; font-weight: 900; margin-bottom: 50px; text-align: center; letter-spacing: 2px; }
-        .nav-menu { flex: 1; }
-        .nav-item {
-            padding: 15px 20px; border-radius: 12px; color: var(--text-gray);
-            cursor: pointer; margin-bottom: 10px; transition: 0.3s;
-            display: flex; align-items: center; gap: 12px; font-family: 'Orbitron'; font-size: 11px;
-        }
-        .nav-item i { font-size: 16px; width: 25px; }
-        .nav-item:hover, .nav-item.active { background: var(--card-bg); color: var(--gold); border: 1px solid var(--border); }
+        header h2 { font-family: 'Orbitron'; font-size: 14px; color: var(--gold); letter-spacing: 1px; }
 
-        /* --- MAIN CONTENT --- */
-        .main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; background: #080808; }
-        header { padding: 25px 40px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        /* STATS GRID */
+        .stats-container {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px;
+        }
+        .stat-box {
+            background: var(--card); padding: 15px; border-radius: 15px; border: 1px solid var(--border);
+            text-align: center;
+        }
+        .stat-box p { font-size: 9px; color: #666; font-family: 'Orbitron'; margin-bottom: 5px; }
+        .stat-box h3 { font-family: 'Orbitron'; font-size: 14px; color: var(--gold); }
+
+        /* CONTENT SECTIONS */
+        .content-section { padding: 10px 15px; display: none; }
+        .content-section.active { display: block; }
+
+        /* CARD STYLE FOR DATA (Thay thế cho Table trên Mobile) */
+        .data-card {
+            background: var(--card); border-radius: 15px; border: 1px solid var(--border);
+            padding: 15px; margin-bottom: 10px; position: relative;
+        }
+        .card-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+        .card-label { color: #555; font-weight: 700; text-transform: uppercase; font-size: 10px; }
+        .card-val { font-weight: 600; color: #eee; }
         
-        /* --- DASHBOARD STATS --- */
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 30px 40px; }
-        .stat-card { background: var(--card-bg); padding: 25px; border-radius: 20px; border: 1px solid var(--border); }
-        .stat-card p { font-size: 10px; color: var(--text-gray); font-family: 'Orbitron'; margin-bottom: 10px; }
-        .stat-card h2 { font-family: 'Orbitron'; font-size: 20px; color: var(--gold); }
+        /* BOTTOM NAVIGATION */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 75px;
+            background: #080808; border-top: 1px solid var(--border);
+            display: flex; justify-content: space-around; align-items: center; z-index: 1000;
+        }
+        .nav-btn { color: #444; text-align: center; font-size: 9px; text-decoration: none; cursor: pointer; flex: 1; }
+        .nav-btn.active { color: var(--gold); }
+        .nav-btn i { font-size: 18px; margin-bottom: 5px; display: block; }
 
-        /* --- TABLE SECTION --- */
-        .table-section { padding: 0 40px 40px; }
-        .table-container { 
-            background: var(--card-bg); border-radius: 25px; border: 1px solid var(--border); 
-            overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        /* BUTTONS */
+        .btn-action {
+            width: 100%; padding: 12px; border-radius: 10px; border: none;
+            font-family: 'Orbitron'; font-weight: 900; font-size: 11px; margin-top: 5px;
         }
-        .table-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-        .search-input { 
-            background: #000; border: 1px solid var(--border); padding: 12px 20px; 
-            border-radius: 12px; color: #fff; width: 300px; outline: none; transition: 0.3s;
-        }
-        .search-input:focus { border-color: var(--gold); }
+        .btn-green { background: var(--green); color: #000; }
+        .btn-gold { background: var(--gold); color: #000; }
 
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { padding: 20px; font-family: 'Orbitron'; font-size: 10px; color: var(--text-gray); text-transform: uppercase; border-bottom: 1px solid var(--border); }
-        td { padding: 18px 20px; font-size: 13px; border-bottom: 1px solid #121212; }
-        
-        /* --- UTILS --- */
-        .btn { 
-            padding: 8px 15px; border-radius: 8px; border: none; font-family: 'Orbitron'; 
-            font-size: 9px; cursor: pointer; font-weight: 900; transition: 0.3s;
+        /* SEARCH BAR */
+        .search-bar { padding: 0 15px 10px; }
+        .search-bar input {
+            width: 100%; background: #0a0a0a; border: 1px solid var(--border); padding: 12px;
+            border-radius: 10px; color: #fff; outline: none;
         }
-        .btn-approve { background: var(--green); color: #000; }
-        .btn-edit { background: var(--gold); color: #000; }
-        .btn-delete { background: var(--red); color: #fff; }
-        
-        .badge { padding: 5px 10px; border-radius: 6px; font-size: 9px; font-weight: 800; font-family: 'Orbitron'; }
-        .bg-pending { background: rgba(255, 215, 0, 0.1); color: var(--gold); }
-        .bg-success { background: rgba(0, 255, 136, 0.1); color: var(--green); }
-
-        /* --- MODAL --- */
-        .modal { 
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9); 
-            display: none; align-items: center; justify-content: center; z-index: 9999;
-        }
-        .modal-content { 
-            background: var(--card-bg); padding: 40px; border-radius: 25px; 
-            border: 1px solid var(--gold); width: 400px; text-align: center;
-        }
-        .modal-content input { 
-            width: 100%; background: #000; border: 1px solid #333; 
-            padding: 15px; border-radius: 12px; color: #fff; margin: 20px 0; outline: none;
-        }
-
-        .section-panel { display: none; }
-        .section-panel.active { display: block; }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <div class="logo">QUANTUM PANEL</div>
-        <div class="nav-menu">
-            <div class="nav-item active" onclick="switchPanel('users-panel', this)">
-                <i class="fas fa-users"></i> QUẢN LÝ NGƯỜI DÙNG
-            </div>
-            <div class="nav-item" onclick="switchPanel('deposit-panel', this)">
-                <i class="fas fa-wallet"></i> DUYỆT NẠP TIỀN
-            </div>
-            <div class="nav-item" onclick="switchPanel('withdraw-panel', this)">
-                <i class="fas fa-hand-holding-usd"></i> DUYỆT RÚT TIỀN
-            </div>
-            <div class="nav-item" onclick="switchPanel('invest-panel', this)">
-                <i class="fas fa-cube"></i> GÓI ĐANG CHẠY
-            </div>
-        </div>
+    <header>
+        <h2>QUANTUM ADMIN</h2>
+        <i class="fas fa-sync-alt" style="color:var(--gold)" onclick="refreshData()"></i>
+    </header>
+
+    <div class="stats-container">
+        <div class="stat-box"><p>THÀNH VIÊN</p><h3 id="stat-u">0</h3></div>
+        <div class="stat-box"><p>ĐẦU TƯ</p><h3 id="stat-i">0đ</h3></div>
+        <div class="stat-box"><p>NẠP CHỜ</p><h3 id="stat-nd" style="color:var(--green)">0</h3></div>
+        <div class="stat-box"><p>RÚT CHỜ</p><h3 id="stat-wd" style="color:var(--red)">0</h3></div>
     </div>
 
-    <div class="main-content">
-        <header>
-            <h2 id="panel-title">HỆ THỐNG QUẢN TRỊ</h2>
-            <div id="admin-info" style="font-size: 11px; color: var(--gold); font-family: 'Orbitron';">CONNECTED: SUPABASE CLOUD</div>
-        </header>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <p>TỔNG THÀNH VIÊN</p>
-                <h2 id="stat-users">0</h2>
-            </div>
-            <div class="stat-card">
-                <p>TỔNG VỐN ĐẦU TƯ</p>
-                <h2 id="stat-invest">0đ</h2>
-            </div>
-            <div class="stat-card">
-                <p>LỆNH NẠP CHỜ</p>
-                <h2 id="stat-pending-dep" style="color: var(--gold);">0</h2>
-            </div>
-            <div class="stat-card">
-                <p>LỆNH RÚT CHỜ</p>
-                <h2 id="stat-pending-draw" style="color: var(--red);">0</h2>
-            </div>
-        </div>
-
-        <div id="users-panel" class="section-panel active">
-            <div class="table-section">
-                <div class="table-container">
-                    <div class="table-header">
-                        <span style="font-family: 'Orbitron'; font-size: 12px;">DANH SÁCH THÀNH VIÊN</span>
-                        <input type="text" class="search-input" placeholder="Tìm SĐT khách..." oninput="searchData('user-table', this.value)">
-                    </div>
-                    <table id="user-table">
-                        <thead>
-                            <tr>
-                                <th>SĐT</th>
-                                <th>MẬT KHẨU</th>
-                                <th>SỐ DƯ</th>
-                                <th>HÀNH ĐỘNG</th>
-                            </tr>
-                        </thead>
-                        <tbody id="user-list"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="deposit-panel" class="section-panel">
-            <div class="table-section">
-                <div class="table-container">
-                    <div class="table-header">
-                        <span style="font-family: 'Orbitron'; font-size: 12px;">YÊU CẦU NẠP TIỀN</span>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>THỜI GIAN</th>
-                                <th>SĐT</th>
-                                <th>SỐ TIỀN</th>
-                                <th>TRẠNG THÁI</th>
-                                <th>THAO TÁC</th>
-                            </tr>
-                        </thead>
-                        <tbody id="deposit-list"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="withdraw-panel" class="section-panel">
-            <div class="table-section">
-                <div class="table-container">
-                    <div class="table-header">
-                        <span style="font-family: 'Orbitron'; font-size: 12px;">YÊU CẦU RÚT TIỀN</span>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>THỜI GIAN</th>
-                                <th>SĐT</th>
-                                <th>SỐ TIỀN</th>
-                                <th>THÔNG TIN BANK</th>
-                                <th>THAO TÁC</th>
-                            </tr>
-                        </thead>
-                        <tbody id="withdraw-list"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="invest-panel" class="section-panel">
-            <div class="table-section">
-                <div class="table-container">
-                    <div class="table-header">
-                        <span style="font-family: 'Orbitron'; font-size: 12px;">GÓI ĐẦU TƯ ĐANG CHẠY</span>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>KHÁCH HÀNG</th>
-                                <th>LOẠI GÓI</th>
-                                <th>VỐN ĐẦU TƯ</th>
-                                <th>NGÀY MUA</th>
-                                <th>TRẠNG THÁI</th>
-                            </tr>
-                        </thead>
-                        <tbody id="invest-list"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <div id="section-users" class="content-section active">
+        <div class="search-bar"><input type="text" id="find-u" placeholder="Tìm SĐT..." oninput="filterCards('list-u', this.value)"></div>
+        <div id="list-u"></div>
     </div>
 
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <h3 style="font-family: 'Orbitron'; color: var(--gold);">SỬA SỐ DƯ</h3>
-            <p id="edit-phone" style="font-size: 12px; margin-top: 10px;"></p>
-            <input type="number" id="new-balance" placeholder="Nhập số dư mới...">
-            <div style="display: flex; gap: 10px;">
-                <button class="btn btn-approve" style="flex: 1; padding: 15px;" onclick="saveBalance()">CẬP NHẬT</button>
-                <button class="btn btn-delete" style="flex: 1; padding: 15px;" onclick="closeModal()">HỦY</button>
-            </div>
-        </div>
+    <div id="section-dep" class="content-section">
+        <div id="list-dep"></div>
+    </div>
+
+    <div id="section-draw" class="content-section">
+        <div id="list-draw"></div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-btn active" onclick="showPanel('users', this)"><i class="fas fa-users"></i><span>Khách</span></div>
+        <div class="nav-btn" onclick="showPanel('dep', this)"><i class="fas fa-wallet"></i><span>Duyệt Nạp</span></div>
+        <div class="nav-btn" onclick="showPanel('draw', this)"><i class="fas fa-money-check-alt"></i><span>Duyệt Rút</span></div>
     </div>
 
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
         const supabase = createClient('https://fgartftwimourooudcrp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o');
 
-        let currentEditPhone = '';
-
-        // --- NAVIGATION ---
-        window.switchPanel = (id, el) => {
-            document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            el.classList.add('active');
-            refreshAll();
+        window.showPanel = (id, btn) => {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('section-'+id).classList.add('active');
+            btn.classList.add('active');
         }
 
-        // --- LOAD DATA ---
-        async function refreshAll() {
+        async function refreshData() {
             const { data: users } = await supabase.from('users').select('*').order('created_at', {ascending: false});
             const { data: logs } = await supabase.from('history').select('*').order('created_at', {ascending: false});
 
             if(users) {
-                renderUsers(users);
-                document.getElementById('stat-users').innerText = users.length;
+                document.getElementById('stat-u').innerText = users.length;
+                document.getElementById('list-u').innerHTML = users.map(u => `
+                    <div class="data-card">
+                        <div class="card-row"><span class="card-label">SĐT:</span><span class="card-val" style="color:var(--gold)">${u.phone}</span></div>
+                        <div class="card-row"><span class="card-label">Pass:</span><span class="card-val">${u.password}</span></div>
+                        <div class="card-row"><span class="card-label">Số dư:</span><span class="card-val" style="color:var(--green)">${u.balance.toLocaleString()}đ</span></div>
+                        <button class="btn-action btn-gold" onclick="editBal('${u.phone}', ${u.balance})">SỬA SỐ DƯ</button>
+                    </div>
+                `).join('');
             }
+
             if(logs) {
-                renderDeposits(logs.filter(l => l.type.includes('Nạp')));
-                renderWithdrawals(logs.filter(l => l.type.includes('Rút')));
-                renderInvestments(logs.filter(l => l.type.includes('Đầu tư')));
+                const dep = logs.filter(l => l.type.includes('Nạp'));
+                const draw = logs.filter(l => l.type.includes('Rút'));
                 
-                // Stats
-                document.getElementById('stat-invest').innerText = logs.filter(l => l.type.includes('Đầu tư')).reduce((a,b) => a + b.amount, 0).toLocaleString() + 'đ';
-                document.getElementById('stat-pending-dep').innerText = logs.filter(l => l.type.includes('Nạp') && l.status === 'Chờ duyệt').length;
-                document.getElementById('stat-pending-draw').innerText = logs.filter(l => l.type.includes('Rút') && l.status === 'Chờ duyệt').length;
+                document.getElementById('stat-nd').innerText = dep.filter(x => x.status === 'Chờ duyệt').length;
+                document.getElementById('stat-wd').innerText = draw.filter(x => x.status === 'Chờ duyệt').length;
+
+                document.getElementById('list-dep').innerHTML = dep.map(l => `
+                    <div class="data-card">
+                        <div class="card-row"><span class="card-label">Khách:</span><span>${l.phone}</span></div>
+                        <div class="card-row"><span class="card-label">Số tiền:</span><b style="color:var(--green)">+${l.amount.toLocaleString()}đ</b></div>
+                        <div class="card-row"><span class="card-label">Trạng thái:</span><span>${l.status}</span></div>
+                        ${l.status === 'Chờ duyệt' ? `<button class="btn-action btn-green" onclick="approveD('${l.id}','${l.phone}',${l.amount})">XÁC NHẬN NẠP</button>` : ''}
+                    </div>
+                `).join('');
+
+                document.getElementById('list-draw').innerHTML = draw.map(l => `
+                    <div class="data-card">
+                        <div class="card-row"><span class="card-label">Khách:</span><span>${l.phone}</span></div>
+                        <div class="card-row"><span class="card-label">Rút về:</span><b style="color:var(--red)">-${l.amount.toLocaleString()}đ</b></div>
+                        <div class="card-row" style="font-size:10px; color:#555"><span>${l.note}</span></div>
+                        ${l.status === 'Chờ duyệt' ? `<button class="btn-action btn-green" onclick="approveW('${l.id}')">XÁC NHẬN RÚT</button>` : '<b style="color:var(--green); font-size:10px">ĐÃ DUYỆT</b>'}
+                    </div>
+                `).join('');
             }
         }
 
-        function renderUsers(data) {
-            document.getElementById('user-list').innerHTML = data.map(u => `
-                <tr>
-                    <td><b style="color:var(--gold)">${u.phone}</b></td>
-                    <td>${u.password}</td>
-                    <td style="color:var(--green); font-weight:800">${u.balance.toLocaleString()}đ</td>
-                    <td>
-                        <button class="btn btn-edit" onclick="openEditModal('${u.phone}', ${u.balance})">SỬA TIỀN</button>
-                    </td>
-                </tr>
-            `).join('');
+        window.editBal = async (p, b) => {
+            const n = prompt("Số dư mới cho " + p, b);
+            if(n) { await supabase.from('users').update({ balance: parseInt(n) }).eq('phone', p); refreshData(); }
         }
 
-        function renderDeposits(data) {
-            document.getElementById('deposit-list').innerHTML = data.map(l => `
-                <tr>
-                    <td>${new Date(l.created_at).toLocaleString()}</td>
-                    <td>${l.phone}</td>
-                    <td>${l.amount.toLocaleString()}đ</td>
-                    <td><span class="badge ${l.status === 'Thành công' ? 'bg-success' : 'bg-pending'}">${l.status}</span></td>
-                    <td>
-                        ${l.status === 'Chờ duyệt' ? `<button class="btn btn-approve" onclick="approveDeposit('${l.id}', '${l.phone}', ${l.amount})">DUYỆT NẠP</button>` : '---'}
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function renderWithdrawals(data) {
-            document.getElementById('withdraw-list').innerHTML = data.map(l => `
-                <tr>
-                    <td>${new Date(l.created_at).toLocaleString()}</td>
-                    <td>${l.phone}</td>
-                    <td style="color:var(--red)">-${l.amount.toLocaleString()}đ</td>
-                    <td style="font-size:10px; color:#666">${l.note}</td>
-                    <td>
-                        ${l.status === 'Chờ duyệt' ? `<button class="btn btn-approve" onclick="approveWithdraw('${l.id}')">DUYỆT RÚT</button>` : `<span class="badge bg-success">ĐÃ DUYỆT</span>`}
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function renderInvestments(data) {
-            document.getElementById('invest-list').innerHTML = data.map(l => `
-                <tr>
-                    <td>${l.phone}</td>
-                    <td>${l.type}</td>
-                    <td>${l.amount.toLocaleString()}đ</td>
-                    <td>${new Date(l.created_at).toLocaleDateString()}</td>
-                    <td><span class="badge ${l.status === 'Đã nhận lãi' ? 'bg-success' : 'bg-pending'}">${l.status}</span></td>
-                </tr>
-            `).join('');
-        }
-
-        // --- ACTIONS ---
-        window.approveDeposit = async (id, phone, amt) => {
-            if(!confirm("Xác nhận nạp " + amt.toLocaleString() + " cho " + phone + "?")) return;
-            const { data:user } = await supabase.from('users').select('balance').eq('phone', phone).single();
-            await supabase.from('users').update({ balance: user.balance + amt }).eq('phone', phone);
+        window.approveD = async (id, p, a) => {
+            if(!confirm("Nạp " + a + "đ cho " + p + "?")) return;
+            const { data:u } = await supabase.from('users').select('balance').eq('phone', p).single();
+            await supabase.from('users').update({ balance: u.balance + a }).eq('phone', p);
             await supabase.from('history').update({ status: 'Thành công' }).eq('id', id);
-            refreshAll();
+            refreshData();
         }
 
-        window.approveWithdraw = async (id) => {
-            if(!confirm("Xác nhận đã chuyển tiền cho khách?")) return;
+        window.approveW = async (id) => {
+            if(!confirm("Duyệt rút tiền này?")) return;
             await supabase.from('history').update({ status: 'Thành công' }).eq('id', id);
-            refreshAll();
+            refreshData();
         }
 
-        window.openEditModal = (phone, bal) => {
-            currentEditPhone = phone;
-            document.getElementById('edit-phone').innerText = "Đang sửa cho: " + phone;
-            document.getElementById('new-balance').value = bal;
-            document.getElementById('editModal').style.display = 'flex';
+        window.filterCards = (id, val) => {
+            const cards = document.getElementById(id).children;
+            for(let c of cards) { c.style.display = c.innerText.includes(val) ? '' : 'none'; }
         }
 
-        window.closeModal = () => document.getElementById('editModal').style.display = 'none';
-
-        window.saveBalance = async () => {
-            const val = parseInt(document.getElementById('new-balance').value);
-            await supabase.from('users').update({ balance: val }).eq('phone', currentEditPhone);
-            closeModal();
-            refreshAll();
-        }
-
-        window.searchData = (tableId, val) => {
-            const rows = document.getElementById(tableId).getElementsByTagName('tr');
-            for(let i = 1; i < rows.length; i++) {
-                rows[i].style.display = rows[i].innerText.toLowerCase().includes(val.toLowerCase()) ? '' : 'none';
-            }
-        }
-
-        window.onload = refreshAll;
+        window.onload = refreshData;
     </script>
 </body>
 </html>
