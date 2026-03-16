@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HỆ THỐNG QUẢN TRỊ | BUTTERLESS QUANTUM</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --gold: #FFD700;
+            --gold-light: #fff5ba;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fcf6ba 55%, #aa771c 100%);
+            --bg: #000;
+            --card-bg: rgba(15, 15, 15, 0.98);
+            --border-color: rgba(255, 215, 0, 0.2);
+            --text-gray: #888;
+            --tele-blue: #0088cc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background: var(--bg); 
+            color: #fff; 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden;
+            padding-bottom: 110px;
+        }
+
+        /* Hiệu ứng nền Quantum */
+        .quantum-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% -20%, #222 0%, #000 70%);
+            z-index: -1;
+        }
+
+        /* --- PHẦN ĐẦU TRANG (HEADER) --- */
+        .profile-hero {
+            padding: 60px 20px 50px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(to bottom, rgba(255, 215, 0, 0.05), transparent);
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+        }
+
+        .avatar-main {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            background: #050505;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+        }
+        .avatar-main i { font-size: 45px; color: var(--gold); }
+
+        .vip-tag {
+            position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
+            background: var(--gold-gradient); color: #000;
+            padding: 4px 12px; border-radius: 20px;
+            font-family: 'Orbitron'; font-size: 10px; font-weight: 900;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .user-meta h2 { font-family: 'Orbitron'; font-size: 20px; letter-spacing: 1px; margin-bottom: 5px; }
+        .user-meta span { font-size: 11px; color: var(--text-gray); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+
+        .container { padding: 0 20px; margin-top: -40px; }
+
+        /* --- THẺ TÀI SẢN (ASSET CARD) --- */
+        .asset-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 25px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            margin-bottom: 25px;
+        }
+
+        .asset-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .asset-title span { font-size: 11px; color: var(--text-gray); font-weight: 800; text-transform: uppercase; }
+        .asset-title i { color: var(--gold); font-size: 18px; }
+
+        .main-balance { text-align: center; margin-bottom: 25px; }
+        .main-balance h1 { font-family: 'Orbitron'; font-size: 36px; color: var(--gold); text-shadow: 0 0 20px rgba(255,215,0,0.4); }
+        .main-balance p { font-size: 12px; color: #444; margin-top: 5px; }
+
+        .asset-stats {
+            display: grid; grid-template-columns: 1fr 1fr;
+            padding-top: 20px; border-top: 1px solid #111; gap: 10px;
+        }
+        .stat-box { text-align: center; }
+        .stat-box small { display: block; font-size: 9px; color: #555; margin-bottom: 5px; text-transform: uppercase; }
+        .stat-box b { font-family: 'Orbitron'; font-size: 13px; color: #fff; }
+
+        /* --- NÚT HÀNH ĐỘNG --- */
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+        .btn-action {
+            height: 60px; border-radius: 20px; display: flex; align-items: center; justify-content: center;
+            gap: 10px; text-decoration: none; font-family: 'Orbitron'; font-weight: 900; font-size: 13px;
+            transition: 0.3s;
+        }
+        .btn-nap { background: var(--gold-gradient); color: #000; box-shadow: 0 10px 20px rgba(170, 119, 28, 0.3); }
+        .btn-rut { background: #111; color: #fff; border: 1px solid #222; }
+        .btn-action:active { transform: scale(0.95); }
+
+        /* --- DANH SÁCH MENU (MENU LIST) --- */
+        .section-label { 
+            font-size: 10px; color: var(--gold); font-weight: 900; 
+            text-transform: uppercase; letter-spacing: 3px; margin: 0 0 15px 10px; 
+            display: block; opacity: 0.6;
+        }
+
+        .menu-wrapper { background: var(--card-bg); border-radius: 25px; border: 1px solid #111; overflow: hidden; margin-bottom: 25px; }
+        
+        .menu-row {
+            padding: 20px; display: flex; align-items: center; gap: 15px;
+            border-bottom: 1px solid #111; color: #ccc; text-decoration: none;
+            transition: 0.3s;
+        }
+        .menu-row:last-child { border: none; }
+        .menu-row:active { background: #1a1a1a; }
+
+        .m-icon-box {
+            width: 42px; height: 42px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+        }
+        .bg-gold-soft { background: rgba(255, 215, 0, 0.05); color: var(--gold); }
+        .bg-blue-soft { background: rgba(0, 136, 204, 0.1); color: var(--tele-blue); }
+        .bg-red-soft { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; }
+
+        .menu-info { flex: 1; }
+        .menu-info h4 { font-size: 14px; font-weight: 700; color: #eee; }
+        .menu-info p { font-size: 10px; color: #555; margin-top: 2px; }
+
+        /* --- TRẠNG THÁI VIP TIẾN TRÌNH --- */
+        .vip-progress-card {
+            background: #0a0a0a; border: 1px solid #111; border-radius: 25px;
+            padding: 20px; margin-bottom: 30px;
+        }
+        .progress-header { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 10px; }
+        .progress-bar-bg { width: 100%; height: 6px; background: #1a1a1a; border-radius: 10px; overflow: hidden; }
+        .progress-bar-fill { width: 30%; height: 100%; background: var(--gold-gradient); border-radius: 10px; }
+
+        /* --- NÚT ĐĂNG XUẤT --- */
+        .logout-wrap { text-align: center; padding: 20px 0; }
+        .logout-btn {
+            background: none; border: none; color: #444; font-family: 'Orbitron';
+            font-size: 11px; font-weight: 900; letter-spacing: 2px; cursor: pointer;
+            transition: 0.3s;
+        }
+        .logout-btn:hover { color: #ff4d4d; }
+
+        /* --- NAV BOTTOM --- */
+        nav {
+            position: fixed; bottom: 0; width: 100%; background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(15px); display: flex; justify-content: space-around;
+            padding: 15px 0; border-top: 1px solid #111; z-index: 1000;
+        }
+        nav a { color: #444; text-decoration: none; font-size: 9px; text-align: center; font-weight: 700; transition: 0.3s; }
+        nav a.active { color: var(--gold); transform: translateY(-3px); }
+        nav a i { font-size: 20px; display: block; margin-bottom: 5px; }
+
+        /* Animation */
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+
+    <div class="quantum-bg"></div>
+
+    <section class="profile-hero">
+        <div class="avatar-container animate__animated animate__zoomIn">
+            <div class="avatar-main">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <div class="vip-tag">QUANTUM VIP 1</div>
+        </div>
+        <div class="user-meta animate__animated animate__fadeInUp">
+            <h2 id="user-phone">09xxxxxxxx</h2>
+            <span>ID: <label id="user-id">888291</label> • Verified Account</span>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="asset-card animate__animated animate__fadeInUp delay-1">
+            <div class="asset-title">
+                <span>Tổng tài sản (VND)</span>
+                <i class="fas fa-shield-check"></i>
+            </div>
+            <div class="main-balance">
+                <p>Số dư khả dụng</p>
+                <h1 id="user-balance">0đ</h1>
+            </div>
+            <div class="asset-stats">
+                <div class="stat-box">
+                    <small>Lợi nhuận hôm nay</small>
+                    <b style="color: #00ff88;">+0đ</b>
+                </div>
+                <div class="stat-box">
+                    <small>Tổng thu nhập</small>
+                    <b id="total-earn">0đ</b>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-grid animate__animated animate__fadeInUp delay-1">
+            <a href="nap.html" class="btn-action btn-nap">
+                <i class="fas fa-plus-circle"></i> NẠP TIỀN
+            </a>
+            <a href="rut.html" class="btn-action btn-rut">
+                <i class="fas fa-wallet"></i> RÚT TIỀN
+            </a>
+        </div>
+
+        <span class="section-label">Đẳng cấp thành viên</span>
+        <div class="vip-progress-card animate__animated animate__fadeInUp delay-2">
+            <div class="progress-header">
+                <span>Tiến trình lên VIP 2</span>
+                <b id="progress-percent">15%</b>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="bar-width" style="width: 15%;"></div>
+            </div>
+            <p style="font-size: 9px; color: #444; margin-top: 10px;">*Tăng tổng vốn đầu tư để nâng cấp đặc quyền VIP.</p>
+        </div>
+
+        <span class="section-label">Quản lý hệ thống</span>
+        <div class="menu-wrapper animate__animated animate__fadeInUp delay-2">
+            <a href="lichsu.html" class="menu-row">
+                <div class="m-icon-box bg-gold-soft"><i class="fas fa-list-alt"></i></div>
+                <div class="menu-info">
+                    <h4>Lịch sử giao dịch</h4>
+                    <p>Chi tiết các lệnh nạp và rút tiền.</p>
+                </div>
+                <i class="fas fa-chevron-right" style="font-size: 10px; color: #222;"></i>
+            </a>
+
+            <a href="ref.html" class="menu-row">
+                <div class="m-icon-box bg-gold-soft"><i class="fas fa-users-crown"></i></div>
+                <div class="menu-info">
+                    <h4>Mạng lưới đội ngũ</h4>
+                    <p>Quản lý thành viên và hoa hồng giới thiệu.</p>
+                </div>
+                <i class="fas fa-chevron-right" style="font-size: 10px; color: #222;"></i>
+            </a>
+
+            <a href="https://t.me/Officiallsupports" target="_blank" class="menu-row">
+                <div class="m-icon-box bg-blue-soft"><i class="fab fa-telegram-plane"></i></div>
+                <div class="menu-info">
+                    <h4 style="color: var(--tele-blue);">Hỗ trợ trực tuyến</h4>
+                    <p>Liên hệ chuyên viên CSKH @Officiallsupports.</p>
+                </div>
+                <i class="fas fa-external-link-alt" style="font-size: 10px; color: #222;"></i>
+            </a>
+        </div>
+
+        <span class="section-label">Bảo mật & Cá nhân</span>
+        <div class="menu-wrapper animate__animated animate__fadeInUp delay-3">
+            <a href="#" class="menu-row" onclick="alert('Phiên bản v2.0.4 - Bảo mật Quantum đã được kích hoạt.')">
+                <div class="m-icon-box bg-red-soft"><i class="fas fa-user-lock"></i></div>
+                <div class="menu-info">
+                    <h4>Trung tâm an toàn</h4>
+                    <p>Thay đổi mật khẩu và mã bảo mật PIN.</p>
+                </div>
+                <i class="fas fa-chevron-right" style="font-size: 10px; color: #222;"></i>
+            </a>
+
+            <a href="#" class="menu-row" onclick="alert('Đã xóa bộ nhớ đệm hệ thống!')">
+                <div class="m-icon-box bg-gold-soft"><i class="fas fa-broom"></i></div>
+                <div class="menu-info">
+                    <h4>Tối ưu hóa dữ liệu</h4>
+                    <p>Xóa cache và làm mới trang giao dịch.</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="logout-wrap animate__animated animate__fadeInUp delay-3">
+            <button class="logout-btn" onclick="performLogout()">
+                <i class="fas fa-power-off"></i> THOÁT HỆ THỐNG
+            </button>
+        </div>
+    </div>
+
+    <nav>
+        <a href="index.html"><i class="fas fa-th-large"></i>GIAO DỊCH</a>
+        <a href="lichsu.html"><i class="fas fa-receipt"></i>LỊCH SỬ</a>
+        <a href="ref.html"><i class="fas fa-users"></i>ĐỘI NGŨ</a>
+        <a href="profile.html" class="active"><i class="fas fa-user-circle"></i>TÀI KHOẢN</a>
+    </nav>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        const supabase = createClient('https://fgartftwimourooudcrp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o');
+
+        const phone = localStorage.getItem('user_session');
+
+        async function loadProfile() {
+            if(!phone) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            document.getElementById('user-phone').innerText = phone;
+            // Tạo ID giả từ số điện thoại cho chuyên nghiệp
+            document.getElementById('user-id').innerText = phone.substring(phone.length - 6);
+
+            const { data, error } = await supabase
+                .from('users')
+                .select('*')
+                .eq('phone', phone)
+                .single();
+
+            if(data) {
+                document.getElementById('user-balance').innerText = data.balance.toLocaleString('vi-VN') + "đ";
+                
+                // Logic giả lập VIP tiến trình dựa trên số dư
+                let progress = Math.min((data.balance / 10000000) * 100, 100).toFixed(0);
+                document.getElementById('progress-percent').innerText = progress + "%";
+                document.getElementById('bar-width').style.width = progress + "%";
+            }
+        }
+
+        window.performLogout = () => {
+            if(confirm("Bạn có chắc chắn muốn đăng xuất khỏi hệ thống Quantum?")) {
+                localStorage.removeItem('user_session');
+                window.location.href = 'login.html';
+            }
+        }
+
+        loadProfile();
+    </script>
+</body>
+</html>
