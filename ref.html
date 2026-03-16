@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HỆ THỐNG ĐỘI NGŨ | BUTTERLESS QUANTUM</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --vàng: #FFD700;
+            --vàng-kim: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fcf6ba 55%, #aa771c 100%);
+            --nền: #050505;
+            --thẻ: #111111;
+            --viền: rgba(255, 215, 0, 0.15);
+            --xanh: #00ff88;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--nền); color: #fff; font-family: 'Inter', sans-serif; padding-bottom: 120px; }
+
+        /* HEADER */
+        header {
+            padding: 20px; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--viền);
+            text-align: center; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);
+        }
+        header h2 { font-family: 'Orbitron'; font-size: 18px; color: var(--vàng); letter-spacing: 2px; }
+
+        .container { padding: 20px; }
+
+        /* LINK GIỚI THIỆU */
+        .ref-card {
+            background: linear-gradient(145deg, #1a1a1a, #000);
+            border-radius: 25px; border: 1px solid var(--viền); padding: 25px;
+            text-align: center; margin-bottom: 25px;
+        }
+        .ref-card h3 { font-size: 12px; color: #888; text-transform: uppercase; margin-bottom: 15px; }
+        .ref-link-box {
+            background: #000; padding: 15px; border-radius: 15px; border: 1px dashed var(--vàng);
+            font-size: 13px; color: var(--vàng); word-break: break-all; margin-bottom: 15px;
+        }
+        .btn-copy {
+            width: 100%; padding: 15px; border-radius: 15px; border: none;
+            background: var(--vàng-kim); color: #000; font-weight: 900;
+            cursor: pointer; font-family: 'Orbitron';
+        }
+
+        /* THỐNG KÊ */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .stat-item {
+            background: var(--thẻ); padding: 20px; border-radius: 20px; border: 1px solid #222;
+            text-align: center;
+        }
+        .stat-item i { font-size: 20px; color: var(--vàng); margin-bottom: 10px; }
+        .stat-item p { font-size: 10px; color: #555; text-transform: uppercase; }
+        .stat-item b { font-size: 18px; font-family: 'Orbitron'; color: #fff; }
+
+        /* DANH SÁCH CẤP DƯỚI */
+        .team-section h4 { font-family: 'Orbitron'; font-size: 14px; margin-bottom: 15px; color: var(--vàng); }
+        .team-list { background: var(--thẻ); border-radius: 20px; border: 1px solid #222; overflow: hidden; }
+        .team-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 20px; border-bottom: 1px solid #1a1a1a;
+        }
+        .team-row:last-child { border: none; }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-info i { width: 35px; height: 35px; background: #222; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--vàng); }
+        .user-phone { font-size: 13px; font-weight: 700; }
+        .user-date { font-size: 10px; color: #555; }
+        .user-status { font-size: 10px; padding: 4px 8px; border-radius: 5px; background: rgba(0,255,136,0.1); color: var(--xanh); }
+
+        /* BOTTOM NAV */
+        nav {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 90px;
+            background: #000; border-top: 1px solid #1a1a1a;
+            display: flex; justify-content: space-around; align-items: center; z-index: 1000;
+        }
+        .nav-item { color: #444; text-decoration: none; text-align: center; }
+        .nav-item.active { color: var(--vàng); }
+        .nav-item i { font-size: 20px; }
+        .nav-item span { display: block; font-size: 9px; margin-top: 5px; font-weight: 800; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>ĐỘI NGŨ QUANTUM</h2>
+    </header>
+
+    <div class="container">
+        <div class="ref-card animate__animated animate__fadeInDown">
+            <h3>Liên kết giới thiệu của bạn</h3>
+            <div class="ref-link-box" id="ref-url">Đang tạo liên kết...</div>
+            <button class="btn-copy" onclick="window.copyRef()">SAO CHÉP LIÊN KẾT</button>
+            <p style="font-size: 10px; color: var(--xanh); margin-top: 10px;">Nhận ngay 20,000đ khi bạn bè đầu tư gói đầu tiên!</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <i class="fas fa-users"></i>
+                <p>Tổng thành viên</p>
+                <b id="total-ref">0</b>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-hand-holding-usd"></i>
+                <p>Hoa hồng nhận</p>
+                <b id="total-comm">0đ</b>
+            </div>
+        </div>
+
+        <div class="team-section">
+            <h4>THÀNH VIÊN TRỰC TIẾP (F1)</h4>
+            <div class="team-list" id="list-f1">
+                <div style="padding: 30px; text-align: center; color: #444; font-size: 12px;">Chưa có thành viên nào trong đội ngũ.</div>
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Trang Chủ</span></a>
+        <a href="lichsu.html" class="nav-item"><i class="fas fa-history"></i><span>Lịch Sử</span></a>
+        <a href="ref.html" class="nav-item active"><i class="fas fa-users-crown"></i><span>Đội Ngũ</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>Cá Nhân</span></a>
+    </nav>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        
+        const supabase = createClient('https://fgartftwimourooudcrp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o');
+
+        const phone = localStorage.getItem('user_session');
+
+        window.onload = async () => {
+            if(!phone) { window.location.href = 'login.html'; return; }
+
+            // Tạo link giới thiệu: Gắn SĐT vào cuối link đăng ký
+            const currentUrl = window.location.origin;
+            const refLink = `${currentUrl}/register.html?ref=${phone}`;
+            document.getElementById('ref-url').innerText = refLink;
+
+            // Truy vấn danh sách cấp dưới (những người có ref_by = số điện thoại của mình)
+            const { data, count, error } = await supabase
+                .from('users')
+                .select('*', { count: 'exact' })
+                .eq('ref_by', phone);
+
+            if(!error && data) {
+                document.getElementById('total-ref').innerText = count;
+                renderTeam(data);
+            }
+        };
+
+        function renderTeam(members) {
+            const container = document.getElementById('list-f1');
+            if(members.length === 0) return;
+
+            container.innerHTML = members.map(m => `
+                <div class="team-row">
+                    <div class="user-info">
+                        <i class="fas fa-user"></i>
+                        <div>
+                            <p class="user-phone">${m.phone.substring(0,3)}***${m.phone.substring(7)}</p>
+                            <p class="user-date">Thành viên mới</p>
+                        </div>
+                    </div>
+                    <span class="user-status">Đang hoạt động</span>
+                </div>
+            `).join('');
+        }
+
+        window.copyRef = () => {
+            const link = document.getElementById('ref-url').innerText;
+            navigator.clipboard.writeText(link).then(() => {
+                alert("Đã sao chép link giới thiệu!");
+            });
+        };
+    </script>
+</body>
+</html>
