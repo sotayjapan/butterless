@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BUTTERLESS | SECURE ACCESS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --gold: #FFD700;
+            --gold-glow: rgba(255, 215, 0, 0.5);
+            --bg-dark: #000000;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { 
+            background: var(--bg-dark); 
+            color: #fff; 
+            height: 100vh; 
+            overflow: hidden; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+        }
+
+        /* --- BACKGROUND PARTICLES --- */
+        #bg-canvas { position: fixed; inset: 0; z-index: 1; }
+
+        /* --- LOADING OVERLAY --- */
+        #loader {
+            position: fixed; inset: 0; background: #000; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 1s ease;
+        }
+        .scanner {
+            width: 200px; height: 2px; background: var(--gold);
+            box-shadow: 0 0 15px var(--gold);
+            animation: scan 2s infinite;
+        }
+        @keyframes scan { 0%, 100% { transform: translateY(-50px); } 50% { transform: translateY(50px); } }
+
+        /* --- MAIN LOGIN CARD --- */
+        .auth-container {
+            position: relative; z-index: 10;
+            width: 90%; max-width: 420px;
+            padding: 40px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            animation: cardEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(50px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .logo-wrapper {
+            position: relative; width: 120px; height: 120px; margin: 0 auto 30px;
+        }
+        .logo-wrapper img {
+            width: 100%; height: 100%; object-fit: contain;
+            filter: drop-shadow(0 0 15px var(--gold-glow));
+            animation: float 4s infinite ease-in-out;
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        .brand-title {
+            font-size: 28px; font-weight: 900; letter-spacing: 5px;
+            background: linear-gradient(to right, #fff, var(--gold), #fff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        /* --- INPUTS --- */
+        .input-box {
+            position: relative; margin-bottom: 20px; text-align: left;
+        }
+        .input-box i {
+            position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
+            color: var(--gold); font-size: 18px; transition: 0.3s;
+        }
+        input {
+            width: 100%; padding: 18px 18px 18px 50px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px; color: #fff; font-size: 16px; outline: none;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        input:focus {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(255,215,0,0.2);
+        }
+        input:focus + i { filter: drop-shadow(0 0 5px var(--gold)); }
+
+        /* --- BUTTON --- */
+        .auth-btn {
+            width: 100%; padding: 18px; margin-top: 10px;
+            background: linear-gradient(45deg, #b8860b, #FFD700, #b8860b);
+            background-size: 200% auto;
+            border: none; border-radius: 15px;
+            color: #000; font-weight: 800; font-size: 16px;
+            text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer; transition: 0.5s;
+            box-shadow: 0 10px 20px rgba(255,215,0,0.3);
+        }
+        .auth-btn:hover { background-position: right center; transform: translateY(-3px); }
+        .auth-btn:active { transform: translateY(0); }
+
+        .footer-text {
+            margin-top: 25px; font-size: 12px; color: #666; letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <div id="loader">
+        <img src="https://i.ibb.co/vzR0XfX/diamond-logo.png" width="60" style="margin-bottom: 20px; opacity: 0.5;">
+        <div class="scanner"></div>
+        <p style="margin-top: 20px; font-size: 10px; letter-spacing: 3px; color: var(--gold);">SECURE CONNECTION...</p>
+    </div>
+
+    <div class="auth-container">
+        <div class="logo-wrapper">
+            <img src="https://i.ibb.co/vzR0XfX/diamond-logo.png" alt="Butterless Logo">
+        </div>
+        <h1 class="brand-title">BUTTERLESS</h1>
+        <p style="color: #888; font-size: 11px; margin-bottom: 30px; letter-spacing: 2px;">PREMIUM WEALTH MANAGEMENT</p>
+
+        <div class="input-box">
+            <i class="fas fa-phone"></i>
+            <input type="number" id="phone" placeholder="Số điện thoại hệ thống">
+        </div>
+        <div class="input-box">
+            <i class="fas fa-shield-alt"></i>
+            <input type="password" id="pass" placeholder="Mật mã bảo mật">
+        </div>
+
+        <button class="auth-btn" id="authBtn">KÍCH HOẠT TRUY CẬP</button>
+        
+        <div class="footer-text">
+            <i class="fas fa-lock"></i> End-to-End Encryption
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        
+        // CẤU HÌNH SUPABASE CỦA BẠN
+        const URL = 'https://fgartftwimourooudcrp.supabase.co'
+        const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o'
+        const supabase = createClient(URL, KEY)
+
+        // Hiệu ứng Canvas Background
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function initCanvas() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            for(let i=0; i<60; i++) particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*2, d: Math.random()*0.5});
+        }
+        function draw() {
+            ctx.clearRect(0,0,canvas.width, canvas.height); ctx.fillStyle = "rgba(255,215,0,0.3)";
+            particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill(); p.y -= p.d; if(p.y < 0) p.y = canvas.height; });
+            requestAnimationFrame(draw);
+        }
+        window.addEventListener('resize', initCanvas); initCanvas(); draw();
+
+        // Xử lý Login
+        window.onload = () => { setTimeout(() => { document.getElementById('loader').style.opacity = '0'; setTimeout(()=>document.getElementById('loader').remove(), 1000); }, 1500); }
+
+        document.getElementById('authBtn').addEventListener('click', async () => {
+            const phone = document.getElementById('phone').value;
+            const pass = document.getElementById('pass').value;
+            if(!phone || !pass) return;
+
+            const btn = document.getElementById('authBtn');
+            btn.innerText = "AUTHENTICATING...";
+            
+            const { data: user } = await supabase.from('users').select('*').eq('phone', phone).single();
+
+            if (user) {
+                if (user.password === pass) {
+                    localStorage.setItem('user_session', phone);
+                    window.location.href = 'index.html';
+                } else { alert("ACCESS DENIED: WRONG PASSWORD"); btn.innerText = "KÍCH HOẠT TRUY CẬP"; }
+            } else {
+                const { error } = await supabase.from('users').insert([{ phone, password: pass, balance: 0 }]);
+                if (!error) { localStorage.setItem('user_session', phone); window.location.href = 'index.html'; }
+            }
+        });
+    </script>
+</body>
+</html>
