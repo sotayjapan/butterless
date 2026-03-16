@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BUTTERLESS V5.0 | HỆ THỐNG ĐẦU TƯ QUANTUM CAO CẤP</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --gold: #FFD700;
+            --gold-gradient: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728, #fcf6ba, #aa771c);
+            --bg-dark: #050505;
+            --card-bg: #111111;
+            --green: #00ff88;
+            --red: #ff4d4d;
+            --border-glow: rgba(255, 215, 0, 0.15);
+            --text-gray: #888888;
+        }
+
+        /* --- NỀN TẢNG --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        ::-webkit-scrollbar { width: 0px; }
+        body { 
+            background: var(--bg-dark); color: #fff; font-family: 'Inter', sans-serif; 
+            overflow-x: hidden; padding-bottom: 110px; line-height: 1.6;
+        }
+
+        /* --- HIỆU ỨNG HẠT NỀN --- */
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; width: 100%; height: 100%; opacity: 0.3; }
+
+        /* --- HEADER --- */
+        header {
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.95); border-bottom: 1px solid var(--border-glow);
+            position: sticky; top: 0; z-index: 9999; backdrop-filter: blur(15px);
+        }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .avatar-vip {
+            width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            background: radial-gradient(circle, #222, #000);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+
+        /* --- ICON HỘP QUÀ NỔI (1 CHẠM NHẬN TIỀN) --- */
+        .gift-container {
+            position: fixed; right: 15px; top: 60%; transform: translateY(-50%);
+            z-index: 1000; display: none; flex-direction: column; align-items: center;
+        }
+        .gift-icon {
+            width: 65px; height: 65px; background: var(--gold-gradient); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 3px solid #fff; box-shadow: 0 10px 30px rgba(255,215,0,0.5);
+            cursor: pointer; animation: giftPulse 1.5s infinite;
+        }
+        @keyframes giftPulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,215,0,0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(255,215,0,0); }
+            100% { transform: scale(1); }
+        }
+        .gift-label { font-size: 10px; color: var(--gold); font-weight: 900; margin-top: 8px; text-shadow: 0 0 5px #000; }
+
+        /* --- BẢNG ĐIỀU KHIỂN VÍ --- */
+        .wallet-wrapper { padding: 20px; }
+        .wallet-card {
+            background: linear-gradient(145deg, #151515 0%, #000 100%);
+            border-radius: 35px; border: 1px solid var(--border-glow); padding: 35px 25px;
+            position: relative; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.9);
+        }
+        .balance-label { font-size: 11px; color: var(--text-gray); letter-spacing: 2px; font-weight: 800; }
+        .balance-amount { font-size: 45px; font-weight: 900; color: #fff; margin: 15px 0; font-family: 'Orbitron'; }
+
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
+        .btn-act {
+            padding: 18px; border-radius: 22px; border: none; font-weight: 900; font-size: 14px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            text-decoration: none; transition: 0.3s;
+        }
+        .btn-nap { background: var(--gold-gradient); color: #000; }
+        .btn-rut { background: #1a1a1a; color: #fff; border: 1px solid #333; }
+
+        /* --- TRADING SIMULATION --- */
+        .trading-view { margin: 25px 20px; background: #000; border-radius: 20px; padding: 20px; border: 1px solid #111; }
+        .chart-info { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 11px; font-family: 'Orbitron'; }
+        .candle-box { display: flex; align-items: flex-end; gap: 5px; height: 100px; }
+        .candle { flex: 1; border-radius: 2px; transition: 0.5s; }
+
+        /* --- NHIỆM VỤ --- */
+        .task-box { margin: 25px 20px; background: var(--card-bg); border-radius: 25px; padding: 20px; border: 1px solid #222; }
+        .task-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1a1a1a; }
+        .task-item:last-child { border: none; }
+        .task-btn { background: #000; border: 1px solid var(--gold); color: var(--gold); padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 800; }
+
+        /* --- DANH SÁCH GÓI ĐẦU TƯ --- */
+        .section-title { padding: 10px 25px; font-family: 'Orbitron'; font-size: 15px; color: var(--gold); }
+        .package-container { padding: 15px 20px; display: flex; flex-direction: column; gap: 20px; }
+        .package-card {
+            background: var(--card-bg); border-radius: 30px; padding: 25px; border: 1px solid #222;
+            position: relative; overflow: hidden; transition: 0.4s;
+        }
+        .package-card h4 { font-size: 13px; color: var(--text-gray); margin-bottom: 5px; }
+        .package-price { font-size: 32px; font-weight: 900; color: #fff; font-family: 'Orbitron'; margin-bottom: 20px; }
+        .package-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-box { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 18px; text-align: center; }
+        .stat-box span { display: block; font-size: 9px; color: #555; text-transform: uppercase; }
+        .stat-box b { font-size: 15px; color: var(--green); }
+        .btn-buy {
+            width: 100%; padding: 20px; border-radius: 20px; border: none;
+            background: #151515; color: var(--gold); border: 1px solid var(--border-glow);
+            font-weight: 900; font-size: 14px; cursor: pointer; transition: 0.3s;
+        }
+
+        /* --- FOOTER NAV --- */
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 100px;
+            background: rgba(0,0,0,0.98); border-top: 1px solid #1a1a1a;
+            display: flex; justify-content: space-around; align-items: center; z-index: 10000;
+        }
+        .nav-link { color: #444; text-decoration: none; text-align: center; }
+        .nav-link.active { color: var(--gold); }
+        .nav-link i { font-size: 24px; }
+        .nav-link span { display: block; font-size: 10px; font-weight: 800; margin-top: 6px; }
+
+        /* --- TELEGRAM --- */
+        .tele-float { position: fixed; bottom: 120px; right: 20px; z-index: 999; }
+        .tele-icon {
+            width: 60px; height: 60px; background: #0088cc; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 30px; border: 3px solid #fff; box-shadow: 0 10px 30px rgba(0,136,204,0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <div id="gift-float" class="gift-container">
+        <div class="gift-icon" onclick="window.claimGiftDirect()">
+            <i class="fas fa-gift"></i>
+        </div>
+        <div class="gift-label">NHẬN 50K VỐN</div>
+    </div>
+
+    <header>
+        <div class="header-left">
+            <div class="avatar-vip"><i class="fas fa-crown" style="color:var(--gold);"></i></div>
+            <div>
+                <p id="display-phone" style="font-weight: 900; font-size: 14px;">09x.xxx.xxxx</p>
+                <p style="font-size: 9px; color: var(--green); font-weight: 900;">QUANTUM SECURE ●</p>
+            </div>
+        </div>
+        <i class="fas fa-power-off" style="color: #333; font-size: 20px;" onclick="window.handleLogout()"></i>
+    </header>
+
+    <div class="wallet-wrapper">
+        <div class="wallet-card">
+            <p class="balance-label">SỐ DƯ KHẢ DỤNG (VND)</p>
+            <h1 class="balance-amount" id="display-balance">0đ</h1>
+            <div style="display:flex; gap:15px; opacity:0.6; font-size:11px;">
+                <span><i class="fas fa-chart-pie"></i> Lợi nhuận: +0%</span>
+                <span><i class="fas fa-check-circle"></i> Đã bảo mật</span>
+            </div>
+            
+            <div class="action-grid">
+                <a href="nap.html" class="btn-act btn-nap"><i class="fas fa-plus-circle"></i> NẠP TIỀN</a>
+                <a href="rut.html" class="btn-act btn-rut"><i class="fas fa-wallet"></i> RÚT TIỀN</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="trading-view">
+        <div class="chart-info">
+            <span>BITCOIN / VNDT</span>
+            <span style="color:var(--green)">+2.41% <i class="fas fa-caret-up"></i></span>
+        </div>
+        <div class="candle-box" id="candle-chart"></div>
+    </div>
+
+    <div class="task-box">
+        <p style="font-size:10px; color:#555; text-align:center; margin-bottom:15px; font-family:'Orbitron';">NHIỆM VỤ NGÀY</p>
+        <div class="task-item">
+            <div><p style="font-size:13px;">Điểm danh mỗi ngày</p><p style="font-size:10px; color:var(--green);">+ 5,000đ</p></div>
+            <button class="task-btn" onclick="alert('Hãy đầu tư 1 gói để mở khóa điểm danh!')">NHẬN</button>
+        </div>
+        <div class="task-item">
+            <div><p style="font-size:13px;">Mời 1 thành viên</p><p style="font-size:10px; color:var(--green);">+ 20,000đ</p></div>
+            <button class="task-btn" onclick="window.location.href='ref.html'">CHI TIẾT</button>
+        </div>
+    </div>
+
+    <h3 class="section-title">GÓI ĐẦU TƯ BETA</h3>
+    <div class="package-container" id="package-list"></div>
+
+    <div class="tele-float">
+        <a href="https://t.me/Officiallsupports" target="_blank" class="tele-icon">
+            <i class="fab fa-telegram-plane"></i>
+        </a>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="nav-link active"><i class="fas fa-home-alt"></i><span>Trang Chủ</span></a>
+        <a href="lichsu.html" class="nav-link"><i class="fas fa-history"></i><span>Lịch Sử</span></a>
+        <a href="ref.html" class="nav-link"><i class="fas fa-users-crown"></i><span>Đội Ngũ</span></a>
+        <a href="profile.html" class="nav-link"><i class="fas fa-user-circle"></i><span>Cá Nhân</span></a>
+    </nav>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        
+        const supabase = createClient('https://fgartftwimourooudcrp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnYXJ0ZnR3aW1vdXJvb3VkY3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjcwNjAsImV4cCI6MjA4OTIwMzA2MH0.OY9xaxGcir8U4BeoUDg1BOOeNTEM4LRhpftAZruBb8o');
+
+        const phone = localStorage.getItem('user_session');
+        let userData = null;
+
+        const packages = [
+            { n: 'BETA 1', p: 90000, r: '12%', d: '10 Ngày' },
+            { n: 'BETA 2', p: 200000, r: '15%', d: '15 Ngày' },
+            { n: 'BETA 3', p: 500000, r: '18%', d: '20 Ngày' },
+            { n: 'BETA 4', p: 1000000, r: '22%', d: '30 Ngày' },
+            { n: 'BETA 5', p: 3000000, r: '25%', d: '40 Ngày' },
+            { n: 'BETA 6', p: 5000000, r: '30%', d: '50 Ngày' },
+            { n: 'BETA 7', p: 8000000, r: '40%', d: '60 Ngày' }
+        ];
+
+        // --- HÀM NHẬN QUÀ 1 CHẠM (KHÔNG CẦN BẤM XÁC NHẬN) ---
+        window.claimGiftDirect = async () => {
+            if(!userData) return;
+            const giftBox = document.getElementById('gift-float');
+            giftBox.style.pointerEvents = 'none'; // Chống bấm nhiều lần
+            giftBox.style.opacity = '0.5';
+
+            const { error } = await supabase.from('users').update({ 
+                balance: userData.balance + 50000, 
+                is_gift_claimed: true 
+            }).eq('phone', phone);
+            
+            if(!error) {
+                alert("Chúc mừng! Bạn đã nhận thành công 50,000đ tiền vốn.");
+                giftBox.style.display = 'none';
+                userData.balance += 50000;
+                document.getElementById('display-balance').innerText = userData.balance.toLocaleString() + "đ";
+                await supabase.from('history').insert([{ phone, type: 'Nhận quà tân thủ', amount: 50000, status: 'Thành công' }]);
+            } else {
+                alert("Lỗi hệ thống, vui lòng thử lại!");
+                giftBox.style.pointerEvents = 'auto';
+                giftBox.style.opacity = '1';
+            }
+        };
+
+        window.handleBuy = async (name, price) => {
+            if(userData.balance < price) {
+                alert("Số dư không đủ! Vui lòng nạp thêm.");
+                window.location.href = 'nap.html';
+                return;
+            }
+            if(!confirm(`Bắt đầu đầu tư gói ${name}?`)) return;
+
+            const { error } = await supabase.from('users').update({ 
+                balance: userData.balance - price, 
+                has_invested: true 
+            }).eq('phone', phone);
+
+            if(!error) {
+                await supabase.from('history').insert([{ phone, type: 'Đầu tư ' + name, amount: price, status: 'Thành công' }]);
+                alert("Đầu tư thành công!");
+                location.reload();
+            }
+        };
+
+        window.handleLogout = () => { if(confirm("Bạn muốn đăng xuất?")) { localStorage.clear(); window.location.href='login.html'; } };
+
+        window.onload = async () => {
+            if(!phone) { window.location.href = 'login.html'; return; }
+            document.getElementById('display-phone').innerText = "ID: " + phone;
+
+            const { data } = await supabase.from('users').select('*').eq('phone', phone).single();
+            if(data) {
+                userData = data;
+                document.getElementById('display-balance').innerText = data.balance.toLocaleString() + "đ";
+                if(!data.is_gift_claimed) document.getElementById('gift-float').style.display = 'flex';
+            }
+
+            renderContent();
+            startChart();
+        };
+
+        function renderContent() {
+            document.getElementById('package-list').innerHTML = packages.map(p => `
+                <div class="package-card animate__animated animate__fadeInUp">
+                    <h4>KẾ HOẠCH QUANTUM</h4>
+                    <p class="package-price">${p.p.toLocaleString()}đ</p>
+                    <div class="package-stats">
+                        <div class="stat-box"><span>Lợi nhuận</span><b>+${p.r}</b></div>
+                        <div class="stat-box"><span>Chu kỳ</span><b>${p.d}</b></div>
+                    </div>
+                    <button class="btn-buy" onclick="window.handleBuy('${p.n}', ${p.p})">KÍCH HOẠT ĐẦU TƯ</button>
+                </div>
+            `).join('');
+        }
+
+        function startChart() {
+            const chart = document.getElementById('candle-chart');
+            for(let i=0; i<20; i++) {
+                const h = Math.floor(Math.random() * 70) + 10;
+                const color = Math.random() > 0.4 ? '#00ff88' : '#ff4d4d';
+                chart.innerHTML += `<div class="candle" style="height:${h}px; background:${color}"></div>`;
+            }
+        }
+    </script>
+</body>
+</html>
